@@ -7,25 +7,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Pong.h">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PongPCH.h">
+    </ClCompile>
+    <ClCompile Include="ClientPCH.cpp">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PongMath.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PongPCH.cpp">
+    <ClInclude Include="ClientPCH.h">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PongMath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    </ClInclude>
   </ItemGroup>
 </Project>
