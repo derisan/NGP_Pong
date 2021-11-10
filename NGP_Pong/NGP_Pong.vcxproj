@@ -15,12 +15,18 @@
     <ClInclude Include="Pong.h" />
     <ClInclude Include="PongMath.h" />
     <ClInclude Include="PongPCH.h" />
+    <ClInclude Include="SocketAddress.h" />
+    <ClInclude Include="SocketUtil.h" />
+    <ClInclude Include="TCPSocket.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PongMath.cpp" />
     <ClCompile Include="PongPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SocketAddress.cpp" />
+    <ClCompile Include="SocketUtil.cpp" />
+    <ClCompile Include="TCPSocket.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
