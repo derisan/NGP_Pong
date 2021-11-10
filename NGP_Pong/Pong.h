@@ -2,7 +2,10 @@
 
 #include "PongPCH.h"
 
+#include "Tags.h"
 #include "Components.h"
+#include "Game.h"
+#include "Entity.h"
 
 #include "SocketAddress.h"
 #include "TCPSocket.h"
