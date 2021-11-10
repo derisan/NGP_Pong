@@ -11,6 +11,9 @@
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{5dbce550-b806-4148-86d9-f4bbb86ef5e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{459dd765-9a6b-454a-a553-6d73d1b56edb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pong.h">
@@ -33,6 +36,9 @@
     </ClInclude>
     <ClInclude Include="SocketUtil.h">
       <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

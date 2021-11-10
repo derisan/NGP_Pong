@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Pong.h" />
     <ClInclude Include="PongMath.h" />
