@@ -2,7 +2,7 @@
 #include "Client.h"
 
 #include "Scene.h"
-#include "TestScene.h"
+#include "LoginScene.h"
 
 Client::Client()
 	: Game()
@@ -30,6 +30,18 @@ bool Client::Init()
 		return false;
 	}
 
+	if (IMG_Init(IMG_INIT_PNG) == 0)
+	{
+		SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
+		return false;
+	}
+
+	if (TTF_Init() < 0)
+	{
+		SDL_Log("Unable to initialize SDL_ttf: %s", SDL_GetError());
+		return false;
+	}
+
 	mWindow = SDL_CreateWindow("Pong", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 	if (!mWindow)
 	{
@@ -47,9 +59,9 @@ bool Client::Init()
 	mTicksCount = SDL_GetTicks();
 
 	// ¾À »ý¼º
-	TestScene::StaticCreate(this);
+	LoginScene::StaticCreate(this);
 
-	mActiveScene = TestScene::Get();
+	mActiveScene = LoginScene::Get();
 	mActiveScene->Enter();
 
 	return true;

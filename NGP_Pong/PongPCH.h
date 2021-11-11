@@ -5,6 +5,13 @@
 #pragma comment(lib, "fmt")
 #pragma comment(lib, "SDL2")
 #pragma comment(lib, "SDL2_image")
+#pragma comment(lib, "SDL2_ttf")
+#pragma comment(lib, "brotlicommon")
+#pragma comment(lib, "brotlidec")
+#pragma comment(lib, "bz2")
+#pragma comment(lib, "freetype")
+#pragma comment(lib, "libpng16")
+#pragma comment(lib, "zlib")
 #pragma comment(lib, "spdlog")
 
 #include "PongMath.h"
@@ -20,6 +27,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #undef main
 #include <entt/entt.hpp>
 

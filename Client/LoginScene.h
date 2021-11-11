@@ -4,14 +4,14 @@
 
 class Client;
 
-class TestScene : public Scene
+class LoginScene : public Scene
 {
 public:
-	TestScene(Client* client)
+	LoginScene(Client* client)
 		: Scene(client) {}
 
 	static void StaticCreate(Client* client);
-	static TestScene* Get();
+	static LoginScene* Get();
 
 	virtual void Enter() override;
 	virtual void Exit() override;
@@ -20,5 +20,5 @@ public:
 	virtual void Render(SDL_Renderer* mRenderer) override;
 
 private:
-	static TestScene* sInstance;
+	static LoginScene* sInstance;
 };
