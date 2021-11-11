@@ -2,6 +2,7 @@
 #include "LoginScene.h"
 
 #include "Client.h"
+#include "GameScene.h"
 
 LoginScene* LoginScene::sInstance;
 
@@ -41,7 +42,15 @@ void LoginScene::Exit()
 
 void LoginScene::ProcessInput(const uint8_t* keystate)
 {
-	
+	if (keystate[SDL_SCANCODE_RETURN])
+	{
+		bool isConnected = Connects();
+		
+		if (isConnected)
+		{
+			mOwner->ChangeScene(GameScene::Get());
+		}
+	}
 }
 
 void LoginScene::Update(float deltaTime)
@@ -69,4 +78,18 @@ void LoginScene::Render(SDL_Renderer* mRenderer)
 		SDL_DestroyTexture(texture);
 		SDL_FreeSurface(surf);
 	}
+}
+
+bool LoginScene::Connects()
+{
+	TCPSocketPtr& sock = mOwner->GetClientSocket();
+
+	SocketAddress serveraddr(mOwner->SERVER_IP, mOwner->SERVER_PORT);
+
+	if (sock->Connect(serveraddr) != SOCKET_ERROR)
+	{
+		return true;
+	}
+
+	return false;
 }
