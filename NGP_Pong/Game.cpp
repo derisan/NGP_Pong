@@ -17,6 +17,8 @@ Entity* Game::CreateEntity(uint8_t id)
 	e->AddComponent<TransformComponent>();
 	e->AddComponent<IdComponent>(id);
 
+	mEntities[id] = e;
+
 	return e;
 }
 

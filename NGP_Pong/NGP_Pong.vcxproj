@@ -20,6 +20,7 @@
     <ClInclude Include="PongPCH.h" />
     <ClInclude Include="SocketAddress.h" />
     <ClInclude Include="SocketUtil.h" />
+    <ClInclude Include="Systems.h" />
     <ClInclude Include="Tags.h" />
     <ClInclude Include="TCPSocket.h" />
   </ItemGroup>
@@ -32,6 +33,7 @@
     </ClCompile>
     <ClCompile Include="SocketAddress.cpp" />
     <ClCompile Include="SocketUtil.cpp" />
+    <ClCompile Include="Systems.cpp" />
     <ClCompile Include="TCPSocket.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

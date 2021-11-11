@@ -13,7 +13,7 @@ public:
 	virtual void Exit() = 0;
 	virtual void ProcessInput(const uint8_t* keystate) = 0;
 	virtual void Update(float deltaTime) = 0;
-	virtual void Render(SDL_Renderer* mRenderer) = 0;
+	virtual void Render(SDL_Renderer* renderer) = 0;
 
 protected:
 	Client* mOwner;

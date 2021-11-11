@@ -14,7 +14,7 @@ public:
 	virtual void Exit() override;
 	virtual void ProcessInput(const uint8_t* keystate) override;
 	virtual void Update(float deltaTime) override;
-	virtual void Render(SDL_Renderer* mRenderer) override;
+	virtual void Render(SDL_Renderer* renderer) override;
 
 private:
 	static GameScene* sInstance;

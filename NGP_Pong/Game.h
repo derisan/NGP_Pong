@@ -29,9 +29,10 @@ public:
 	const float BALL_WIDTH = 15.0f;
 	const float BALL_SPEED = 150.0f;
 
+	entt::registry mRegistry;
+
 protected:
 	bool mIsRunning;
-	entt::registry mRegistry;
 
 	unordered_map<uint8_t, Entity*> mEntities;
 };

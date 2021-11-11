@@ -49,6 +49,9 @@
     <ClInclude Include="Tags.h">
       <Filter>Source Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Systems.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PongPCH.cpp">
@@ -70,6 +73,9 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
