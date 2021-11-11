@@ -7,8 +7,7 @@ class Client;
 class LoginScene : public Scene
 {
 public:
-	LoginScene(Client* client)
-		: Scene(client) {}
+	LoginScene(Client* client);
 
 	static void StaticCreate(Client* client);
 	static LoginScene* Get();
@@ -21,4 +20,6 @@ public:
 
 private:
 	static LoginScene* sInstance;
+
+	TTF_Font* mFont;
 };

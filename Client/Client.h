@@ -17,6 +17,9 @@ public:
 
 	TCPSocketPtr& GetClientSocket() { return mClientSocket; }
 
+	const string& GetStringInput() const { return mStringInput; }
+	string& GetStringInput() { return mStringInput; }
+
 private:
 	void ProcessInput();
 	void Update();
@@ -30,5 +33,7 @@ private:
 	Scene* mActiveScene;
 
 	uint32_t mTicksCount;
+
+	string mStringInput;
 };
 

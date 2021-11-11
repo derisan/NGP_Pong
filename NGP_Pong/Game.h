@@ -18,10 +18,6 @@ public:
 	Entity* CreatePaddle(uint8_t id);
 	Entity* CreateBall(uint8_t id);
 
-protected:
-	bool mIsRunning;
-	entt::registry mRegistry;
-
 	const int SERVER_PORT = 9000;
 	const char* SERVER_IP = "127.0.0.1";
 
@@ -32,6 +28,10 @@ protected:
 	const float PADDLE_SPEED = 200.0f;
 	const float BALL_WIDTH = 15.0f;
 	const float BALL_SPEED = 150.0f;
+
+protected:
+	bool mIsRunning;
+	entt::registry mRegistry;
 
 	unordered_map<uint8_t, Entity*> mEntities;
 };

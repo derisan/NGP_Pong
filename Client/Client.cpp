@@ -11,6 +11,7 @@ Client::Client()
 	, mClientSocket(nullptr)
 	, mActiveScene(nullptr)
 	, mTicksCount(0)
+	, mStringInput()
 {
 
 }
@@ -77,6 +78,9 @@ void Client::Shutdown()
 	SocketUtil::StaticShutdown();
 
 	SDL_DestroyWindow(mWindow);
+
+	TTF_Quit();
+	IMG_Quit();
 	SDL_Quit();
 }
 
@@ -111,6 +115,15 @@ void Client::ProcessInput()
 		{
 		case SDL_QUIT:
 			mIsRunning = false;
+			break;
+		case SDL_TEXTINPUT:
+			mStringInput += event.text.text;
+			break;
+		case SDL_KEYDOWN:
+			if (event.key.keysym.sym == SDLK_BACKSPACE && mStringInput.size() > 0)
+			{
+				mStringInput.pop_back();
+			}
 			break;
 		}
 	}
