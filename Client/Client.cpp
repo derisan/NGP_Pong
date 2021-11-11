@@ -1,8 +1,8 @@
 #include "ClientPCH.h"
 #include "Client.h"
 
-#include "Scene.h"
 #include "LoginScene.h"
+#include "GameScene.h"
 
 Client::Client()
 	: Game()
@@ -61,6 +61,7 @@ bool Client::Init()
 
 	// ¾À »ı¼º
 	LoginScene::StaticCreate(this);
+	GameScene::StaticCreate(this);
 
 	mActiveScene = LoginScene::Get();
 	mActiveScene->Enter();

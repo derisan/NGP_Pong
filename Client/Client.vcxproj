@@ -109,6 +109,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ClientPCH.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="LoginScene.cpp" />
@@ -116,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientPCH.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="LoginScene.h" />
   </ItemGroup>

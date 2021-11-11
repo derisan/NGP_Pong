@@ -22,6 +22,9 @@
     <ClCompile Include="LoginScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientPCH.h">
@@ -34,6 +37,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="LoginScene.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
