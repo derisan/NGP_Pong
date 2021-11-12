@@ -62,3 +62,13 @@ void Server::WaitAllPlayers()
 		mClientSockets.push_back(clientSocket);
 	}
 }
+
+void Server::ClientThreadFunc()
+{
+	while (1)
+	{
+		// 클라이언트 패킷 수신
+	}
+
+	
+}
