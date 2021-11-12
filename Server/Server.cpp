@@ -56,6 +56,9 @@ void Server::WaitAllPlayers()
 	while (clientNum < MAXIMUM_PLAYER_NUM)
 	{
 		TCPSocketPtr clientSocket = listenSock->Accept(clientaddr);
+		
+		// 클라이언트별 스레드 생성.
+		mClientThreads.emplace_back(&Server::ClientThreadFunc, this, clientSocket, clientNum);
 
 		clientNum++;
 
@@ -63,12 +66,18 @@ void Server::WaitAllPlayers()
 	}
 }
 
-void Server::ClientThreadFunc()
+void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 {
 	while (1)
-	{
+	{	
 		// 클라이언트 패킷 수신
 	}
+}
 
-	
+void Server::CreateGameWorld()
+{
+}
+
+void Server::SendPacketToClient(PacketType pType, const TCPSocketPtr& clientSocket)
+{
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <thread>
+
 #include "Game.h"
 
 class Server : public Game
@@ -14,13 +16,19 @@ public:
 private:
     void WaitAllPlayers(); // 모든 플레이어 접속 대기 함수 
 
-    void ClientThreadFunc();  // 각 클라이언트로부터 패킷을 수신해 mPacketsFromClient에 삽입
+    void ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum); // 각 클라이언트로부터 패킷을 수신해 mPacketsFromClient에 삽입
+  
+    void CreateGameWorld();
 
+    void SendPacketToClient(PacketType pType, const TCPSocketPtr& clientSocket = nullptr);
 
 
 private:
     static const int MAXIMUM_PLAYER_NUM = 3;
 
     vector<TCPSocketPtr> mClientSockets;
+
+    vector<std::thread> mClientThreads;
+    
 };
 
