@@ -15,13 +15,19 @@ bool Server::Init()
 	WaitAllPlayers();
 
 	return true;
-	
 }
 
 void Server::Shutdown()
 {
 	// 윈속 제거 
 	SocketUtil::StaticShutdown();
+
+	mIsRunning = false;
+
+	for (auto& t : mClientThreads)
+	{
+		t.join();
+	}
 }
 
 void Server::Run()
@@ -71,6 +77,13 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 	while (1)
 	{	
 		// 클라이언트 패킷 수신
+
+		bool shouldQuit = !mIsRunning;
+
+		if (shouldQuit)
+		{
+			break;
+		}
 	}
 }
 

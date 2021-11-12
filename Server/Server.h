@@ -24,11 +24,10 @@ private:
 
 
 private:
-    static const int MAXIMUM_PLAYER_NUM = 3;
+    static const int MAXIMUM_PLAYER_NUM = 1;
 
     vector<TCPSocketPtr> mClientSockets;
 
     vector<std::thread> mClientThreads;
-    
 };
 
