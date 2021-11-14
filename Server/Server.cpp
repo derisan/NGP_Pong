@@ -89,6 +89,28 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 
 void Server::CreateGameWorld()
 {
+	// Create left paddle
+	{
+		auto paddle = CreatePaddle(LEFT_PADDLE_ID);
+		auto& transform = paddle->GetComponent<TransformComponent>();
+		transform.Position = Vector2(0.0f, (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
+	}
+
+	// Create right paddle
+	{
+		auto paddle = CreatePaddle(RIGHT_PADDLE_ID);
+		auto& transform = paddle->GetComponent<TransformComponent>();
+		transform.Position = Vector2((WINDOW_WIDTH - PADDLE_WIDTH), (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
+	}
+
+	// Create Ball one
+	{
+		auto ball = CreateBall(BALL_ONE_ID);
+		auto& transform = ball->GetComponent<TransformComponent>();
+		auto& movement = ball->GetComponent<MovementComponent>();
+		transform.Position = Vector2((WINDOW_WIDTH / 2) - (BALL_WIDTH / 2), (WINDOW_HEIGHT / 2) - (BALL_WIDTH / 2));  // Center of screen
+		movement.Direction = Vector2(-1.0f, -1.0f); // Up-Left
+	}
 }
 
 void Server::SendPacketToClient(PacketType pType, const TCPSocketPtr& clientSocket)
