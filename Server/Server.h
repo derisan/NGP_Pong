@@ -20,11 +20,10 @@ private:
   
     void CreateGameWorld();
 
-    void SendPacketToClient(PacketType pType, const TCPSocketPtr& clientSocket = nullptr);
-
+    void SendPacketToClient(const ServerToClient& packet, const TCPSocketPtr& target = nullptr);
 
 private:
-    static const int MAXIMUM_PLAYER_NUM = 1;
+    static const int MAXIMUM_PLAYER_NUM = 2;
 
     vector<TCPSocketPtr> mClientSockets;
 

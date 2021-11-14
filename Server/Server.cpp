@@ -11,6 +11,8 @@ bool Server::Init()
 	//윈속 초기화
 	SocketUtil::StaticInit();
 
+	CreateGameWorld();
+
 	// 플레이어 접속 대기
 	WaitAllPlayers();
 
@@ -33,6 +35,10 @@ void Server::Shutdown()
 void Server::Run()
 {
 	// 게임시작~
+	while (true)
+	{
+
+	}
 }
 
 void Server::WaitAllPlayers()
@@ -74,6 +80,20 @@ void Server::WaitAllPlayers()
 
 void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 {
+	// Send HelloPacket to client
+	ServerToClient packet;
+
+	packet.PType = PacketType::Hello;
+	packet.ClientNum = clientNum;
+	packet.LeftPaddleID = LEFT_PADDLE_ID;
+	packet.LeftPaddlePosition = mEntities[LEFT_PADDLE_ID]->GetComponent<TransformComponent>().Position;
+	packet.RightPaddleID = RIGHT_PADDLE_ID;
+	packet.RightPaddlePosition = mEntities[RIGHT_PADDLE_ID]->GetComponent<TransformComponent>().Position;
+	packet.BallOneID = BALL_ONE_ID;
+	packet.BallOnePosition = mEntities[BALL_ONE_ID]->GetComponent<TransformComponent>().Position;
+
+	SendPacketToClient(packet, clientSock);
+
 	while (1)
 	{	
 		// 클라이언트 패킷 수신
@@ -113,6 +133,17 @@ void Server::CreateGameWorld()
 	}
 }
 
-void Server::SendPacketToClient(PacketType pType, const TCPSocketPtr& clientSocket)
+void Server::SendPacketToClient(const ServerToClient& packet, const TCPSocketPtr& target)
 {
+	if (target)
+	{
+		target->Send(&packet, sizeof(packet));
+	}
+	else
+	{
+		for (const auto& sock : mClientSockets)
+		{
+			sock->Send(&packet, sizeof(packet));
+		}
+	}
 }
