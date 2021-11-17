@@ -31,7 +31,7 @@ void GameScene::Enter()
 
 	if (packet.PType == PacketType::Hello)
 	{
-		ProcessHelloPacket(packet);
+		ProcessPacket(packet);
 	}
 	else
 	{
@@ -46,12 +46,29 @@ void GameScene::Exit()
 
 void GameScene::ProcessInput(const uint8_t* keystate)
 {
-	// TODO :: send packet that contains player's input state to server
+	float yDirection = 0.0f;
+
+	if (keystate[SDL_SCANCODE_W])
+	{
+		yDirection -= 1.0f;
+	}
+
+	if (keystate[SDL_SCANCODE_S])
+	{
+		yDirection += 1.0f;
+	}
 }
 
 void GameScene::Update(float deltaTime)
 {
-	// TODO :: recv packet from server and update all entities' position
+	ServerToClient packet;
+
+	//mOwner->RecvPacketFromServer(packet);
+
+	if (packet.PType == PacketType::Update)
+	{
+		ProcessPacket(packet);
+	}
 }
 
 void GameScene::Render(SDL_Renderer* renderer)
@@ -62,6 +79,30 @@ void GameScene::Render(SDL_Renderer* renderer)
 		auto [rect, transform] = view.get<RectComponent, TransformComponent>(entity);
 
 		Systems::DrawRect(renderer, rect.Width, rect.Height, transform.Position);
+	}
+}
+
+void GameScene::ProcessPacket(const ServerToClient& packet)
+{
+	switch (packet.PType)
+	{
+	case PacketType::Hello:
+		ProcessHelloPacket(packet);
+		break;
+
+	case PacketType::GameStart:
+		break;
+
+	case PacketType::Update:
+		ProcessUpdatePacket(packet);
+		break;
+
+	case PacketType::GameOver:
+		break;
+
+	default:
+		LOG("Unknown packet type.");
+		break;
 	}
 }
 
@@ -91,4 +132,9 @@ void GameScene::ProcessHelloPacket(const ServerToClient& packet)
 		auto& transform = ballOne->GetComponent<TransformComponent>();
 		transform.Position = packet.BallOnePosition;
 	}
+}
+
+void GameScene::ProcessUpdatePacket(const ServerToClient& packet)
+{
+
 }
