@@ -4,6 +4,8 @@
 #include "Client.h"
 #include "GameScene.h"
 
+#include "TextureManager.h"
+
 LoginScene* LoginScene::sInstance;
 
 void LoginScene::StaticCreate(Client* client)
@@ -19,7 +21,9 @@ LoginScene* LoginScene::Get()
 
 LoginScene::LoginScene(Client* client)
 	: Scene(client)
-	, mFont(nullptr) {}
+	, mFont(nullptr)
+	, mBackgroundTexture(nullptr)
+{}
 
 void LoginScene::Enter()
 {
@@ -32,6 +36,13 @@ void LoginScene::Enter()
 	}
 
 	SDL_StartTextInput();
+
+	mBackgroundTexture = TextureManager::GetTexture("Assets/LoginBackground.png");
+
+	if (mBackgroundTexture == nullptr)
+	{
+		ASSERT(nullptr, "Cannot load texture");
+	}
 }
 
 void LoginScene::Exit()
@@ -60,11 +71,23 @@ void LoginScene::Update(float deltaTime)
 
 void LoginScene::Render(SDL_Renderer* renderer)
 {
+	// Draw background image first
+	{
+		SDL_Rect rect;
+		rect.x = 0;
+		rect.y = 0;
+		rect.w = mOwner->WINDOW_WIDTH;
+		rect.h = mOwner->WINDOW_HEIGHT;
+
+		SDL_RenderCopyEx(renderer, mBackgroundTexture, nullptr,
+			&rect, 0, nullptr, SDL_FLIP_NONE);
+	}
+
 	const string& text = mOwner->GetStringInput();
 
 	if (text.size() > 0)
 	{
-		SDL_Surface* surf = TTF_RenderText_Solid(mFont, text.c_str(), SDL_Color{ 255, 255, 0 });
+		SDL_Surface* surf = TTF_RenderText_Solid(mFont, text.c_str(), SDL_Color{ 0, 0, 0 });
 		
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surf);
 

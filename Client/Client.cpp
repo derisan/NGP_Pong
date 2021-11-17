@@ -4,6 +4,8 @@
 #include "LoginScene.h"
 #include "GameScene.h"
 
+#include "TextureManager.h"
+
 Client::Client()
 	: Game()
 	, mWindow(nullptr)
@@ -57,6 +59,8 @@ bool Client::Init()
 		return false;
 	}
 
+	TextureManager::StaticInit(mRenderer);
+	
 	mTicksCount = SDL_GetTicks();
 
 	// ¾À »ý¼º
@@ -77,6 +81,7 @@ void Client::Shutdown()
 	}
 
 	SocketUtil::StaticShutdown();
+	TextureManager::StaticShutdown();
 
 	SDL_DestroyWindow(mWindow);
 
