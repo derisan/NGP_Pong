@@ -76,6 +76,13 @@ void Server::WaitAllPlayers()
 
 		mClientSockets.push_back(clientSocket);
 	}
+
+	// 접속을 다받았으니 GameStart패킷타입을 보낸다.
+	ServerToClient Packet;
+	ZeroMemory(&Packet, sizeof(Packet));
+	Packet.PType = PacketType::GameStart;
+
+	SendPacketToClient(Packet);
 }
 
 void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
@@ -97,7 +104,6 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 	while (1)
 	{	
 		// 클라이언트 패킷 수신
-
 		bool shouldQuit = !mIsRunning;
 
 		if (shouldQuit)
