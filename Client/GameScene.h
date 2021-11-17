@@ -17,5 +17,10 @@ public:
 	virtual void Render(SDL_Renderer* renderer) override;
 
 private:
+	void ProcessHelloPacket(const ServerToClient& packet);
+
+private:
 	static GameScene* sInstance;
+
+	int mClientNum;
 };

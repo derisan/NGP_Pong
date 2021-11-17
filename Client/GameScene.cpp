@@ -7,6 +7,7 @@ GameScene* GameScene::sInstance;
 
 GameScene::GameScene(Client* client)
 	: Scene(client)
+	, mClientNum(-1)
 {
 
 }
@@ -24,9 +25,18 @@ GameScene* GameScene::Get()
 
 void GameScene::Enter()
 {
-	// Rendering test code
-	mOwner->CreatePaddle(0);
-	////////////////////////
+	ServerToClient packet;
+
+	mOwner->RecvPacketFromServer(packet);
+
+	if (packet.PType == PacketType::Hello)
+	{
+		ProcessHelloPacket(packet);
+	}
+	else
+	{
+		ASSERT(nullptr, "Client should recv hello packet first.");
+	}
 }
 
 void GameScene::Exit()
@@ -52,5 +62,33 @@ void GameScene::Render(SDL_Renderer* renderer)
 		auto [rect, transform] = view.get<RectComponent, TransformComponent>(entity);
 
 		Systems::DrawRect(renderer, rect.Width, rect.Height, transform.Position);
+	}
+}
+
+void GameScene::ProcessHelloPacket(const ServerToClient& packet)
+{
+	mClientNum = packet.ClientNum;
+
+	LOG("My client num: {0}", mClientNum);
+
+	// Create left paddle
+	{
+		auto leftPaddle = mOwner->CreatePaddle(packet.LeftPaddleID);
+		auto& transform = leftPaddle->GetComponent<TransformComponent>();
+		transform.Position = packet.LeftPaddlePosition;
+	}
+
+	// Create right paddle
+	{
+		auto rightPaddle = mOwner->CreatePaddle(packet.RightPaddleID);
+		auto& transform = rightPaddle->GetComponent<TransformComponent>();
+		transform.Position = packet.RightPaddlePosition;
+	}
+
+	// Create ball one
+	{
+		auto ballOne = mOwner->CreateBall(packet.BallOneID);
+		auto& transform = ballOne->GetComponent<TransformComponent>();
+		transform.Position = packet.BallOnePosition;
 	}
 }
