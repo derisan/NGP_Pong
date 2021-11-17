@@ -107,6 +107,21 @@ void Client::ChangeScene(Scene* scene)
 	mActiveScene->Enter();
 }
 
+void Client::RecvPacketFromServer(ServerToClient& outPacket)
+{
+	if (mClientSocket == nullptr)
+	{
+		return;
+	}
+
+	int retval = mClientSocket->Recv(&outPacket, sizeof(outPacket));
+
+	if (retval == SOCKET_ERROR || retval == 0)
+	{
+		mIsRunning = false;
+	}
+}
+
 void Client::ProcessInput()
 {
 	SDL_Event event;

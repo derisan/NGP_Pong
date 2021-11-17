@@ -20,6 +20,8 @@ public:
 	const string& GetStringInput() const { return mStringInput; }
 	string& GetStringInput() { return mStringInput; }
 
+	void RecvPacketFromServer(ServerToClient& outPacket);
+
 private:
 	void ProcessInput();
 	void Update();
