@@ -37,6 +37,18 @@ void GameScene::Enter()
 	{
 		ASSERT(nullptr, "Client should recv hello packet first.");
 	}
+
+	mOwner->RecvPacketFromServer(packet);
+
+	if (packet.PType == PacketType::GameStart)
+	{
+		ProcessPacket(packet);
+	}
+	else
+	{
+		ASSERT(nullptr, "Client should recv game start packet.");
+	}
+
 }
 
 void GameScene::Exit()
@@ -132,6 +144,11 @@ void GameScene::ProcessHelloPacket(const ServerToClient& packet)
 		auto& transform = ballOne->GetComponent<TransformComponent>();
 		transform.Position = packet.BallOnePosition;
 	}
+}
+
+void GameScene::ProcessGameStartPacket(const ServerToClient& packet)
+{
+	LOG("Game start!!!");
 }
 
 void GameScene::ProcessUpdatePacket(const ServerToClient& packet)

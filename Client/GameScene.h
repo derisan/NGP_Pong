@@ -18,8 +18,8 @@ public:
 
 private:
 	void ProcessPacket(const ServerToClient& packet);
-
 	void ProcessHelloPacket(const ServerToClient& packet);
+	void ProcessGameStartPacket(const ServerToClient& packet);
 	void ProcessUpdatePacket(const ServerToClient& packet);
 
 private:
