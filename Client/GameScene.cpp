@@ -38,6 +38,8 @@ void GameScene::Enter()
 		ASSERT(nullptr, "Client should recv hello packet first.");
 	}
 
+	mOwner->RenderWaitingScreen();
+
 	mOwner->RecvPacketFromServer(packet);
 
 	if (packet.PType == PacketType::GameStart)
@@ -48,7 +50,6 @@ void GameScene::Enter()
 	{
 		ASSERT(nullptr, "Client should recv game start packet.");
 	}
-
 }
 
 void GameScene::Exit()
@@ -103,6 +104,7 @@ void GameScene::ProcessPacket(const ServerToClient& packet)
 		break;
 
 	case PacketType::GameStart:
+		ProcessGameStartPacket(packet);
 		break;
 
 	case PacketType::Update:

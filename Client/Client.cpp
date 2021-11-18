@@ -112,6 +112,25 @@ void Client::ChangeScene(Scene* scene)
 	mActiveScene->Enter();
 }
 
+void Client::RenderWaitingScreen()
+{
+	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+	SDL_RenderClear(mRenderer);
+
+	SDL_Texture* bg = TextureManager::GetTexture("Assets/waiting.png");
+
+	SDL_Rect rect;
+	rect.x = 0;
+	rect.y = 0;
+	rect.w = WINDOW_WIDTH;
+	rect.h = WINDOW_HEIGHT;
+
+	SDL_RenderCopyEx(mRenderer, bg, nullptr,
+		&rect, 0, nullptr, SDL_FLIP_NONE);
+
+	SDL_RenderPresent(mRenderer);
+}
+
 void Client::RecvPacketFromServer(ServerToClient& outPacket)
 {
 	if (mClientSocket == nullptr)

@@ -15,6 +15,8 @@ public:
 
 	void ChangeScene(Scene* scene);
 
+	void RenderWaitingScreen();
+
 	TCPSocketPtr& GetClientSocket() { return mClientSocket; }
 
 	const string& GetStringInput() const { return mStringInput; }
