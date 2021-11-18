@@ -3,11 +3,14 @@
 
 Server::Server()
 	: Game()
+	, mIsAllHelloPacketSent(nullptr)
 {
 }
 
 bool Server::Init()
 {
+	mIsAllHelloPacketSent = CreateEvent(NULL, NULL, FALSE, NULL);
+
 	//윈속 초기화
 	SocketUtil::StaticInit();
 
@@ -21,6 +24,8 @@ bool Server::Init()
 
 void Server::Shutdown()
 {
+	CloseHandle(mIsAllHelloPacketSent);
+
 	// 윈속 제거 
 	SocketUtil::StaticShutdown();
 
@@ -69,6 +74,8 @@ void Server::WaitAllPlayers()
 	{
 		TCPSocketPtr clientSocket = listenSock->Accept(clientaddr);
 		
+		LOG("클라이언트 접속: {0}", clientNum);
+		
 		// 클라이언트별 스레드 생성.
 		mClientThreads.emplace_back(&Server::ClientThreadFunc, this, clientSocket, clientNum);
 
@@ -76,6 +83,8 @@ void Server::WaitAllPlayers()
 
 		mClientSockets.push_back(clientSocket);
 	}
+
+	WaitForSingleObject(mIsAllHelloPacketSent, INFINITE);
 
 	// 접속을 다받았으니 GameStart패킷타입을 보낸다.
 	ServerToClient Packet;
@@ -100,6 +109,11 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 	packet.BallOnePosition = mEntities[BALL_ONE_ID]->GetComponent<TransformComponent>().Position;
 
 	SendPacketToClient(packet, clientSock);
+
+	if (clientNum == (MAXIMUM_PLAYER_NUM - 1))
+	{
+		SetEvent(mIsAllHelloPacketSent);
+	}
 
 	while (1)
 	{	

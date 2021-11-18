@@ -28,5 +28,7 @@ private:
     vector<TCPSocketPtr> mClientSockets;
 
     vector<std::thread> mClientThreads;
+
+    HANDLE mIsAllHelloPacketSent;
 };
 
