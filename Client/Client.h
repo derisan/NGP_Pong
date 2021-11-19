@@ -23,6 +23,7 @@ public:
 	string& GetStringInput() { return mStringInput; }
 
 	void RecvPacketFromServer(ServerToClient& outPacket);
+	void SendPacketToServer(const ClientToServer& packet);
 
 private:
 	void ProcessInput();

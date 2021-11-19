@@ -142,6 +142,23 @@ void Client::RecvPacketFromServer(ServerToClient& outPacket)
 
 	if (retval == SOCKET_ERROR || retval == 0)
 	{
+		LOG("Client::RecvPacketFromServer");
+		mIsRunning = false;
+	}
+}
+
+void Client::SendPacketToServer(const ClientToServer& packet)
+{
+	if (mClientSocket == nullptr)
+	{
+		return;
+	}
+
+	int retval = mClientSocket->Send(&packet, sizeof(packet));
+
+	if (retval == SOCKET_ERROR)
+	{
+		LOG("Client::SendPacketToServer");
 		mIsRunning = false;
 	}
 }
