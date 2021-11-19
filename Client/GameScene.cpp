@@ -70,6 +70,13 @@ void GameScene::ProcessInput(const uint8_t* keystate)
 	{
 		yDirection += 1.0f;
 	}
+
+	ClientToServer packet;
+
+	packet.ClientNum = mClientNum;
+	packet.YDirection = yDirection;
+
+	mOwner->SendPacketToServer(packet);
 }
 
 void GameScene::Update(float deltaTime)
