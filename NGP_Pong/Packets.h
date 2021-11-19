@@ -27,3 +27,9 @@ struct ServerToClient
 	uint8_t BallOneID;
 	Vector2 BallOnePosition;
 };
+
+struct ClientToServer
+{
+	int ClientNum;
+	float YDirection;
+};
