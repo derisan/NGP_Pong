@@ -33,6 +33,8 @@ private:
 
     HANDLE mIsAllHelloPacketSent;
 
-    vector<ClientToServer> mPackets;
+    deque<ClientToServer> mPackets;
+
+    CRITICAL_SECTION mCS;
 };
 
