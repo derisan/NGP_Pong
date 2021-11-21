@@ -51,15 +51,16 @@ void Server::Run()
 		{
 			ClientToServer packet = mPackets.front();
 			mPackets.pop_front();
-			LOG("Client {0} send{1}", packet.ClientNum, packet.YDirection);
 
+			LeaveCriticalSection(&mCS);
+
+			LOG("Client {0} send {1}", packet.ClientNum, packet.YDirection);
 		}
 		else
 		{
 			LeaveCriticalSection(&mCS);
 			continue;
 		}
-		
 	}
 }
 
