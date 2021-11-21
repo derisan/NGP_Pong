@@ -22,6 +22,8 @@ private:
 
     void SendPacketToClient(const ServerToClient& packet, const TCPSocketPtr& target = nullptr);
 
+    int RecvPacketFromClient(ClientToServer& outPacket, const TCPSocketPtr& target);
+
 private:
     static const int MAXIMUM_PLAYER_NUM = 2;
 
@@ -30,5 +32,7 @@ private:
     vector<std::thread> mClientThreads;
 
     HANDLE mIsAllHelloPacketSent;
+
+    vector<ClientToServer> mPackets;
 };
 

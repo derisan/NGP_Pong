@@ -124,6 +124,33 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 		{
 			break;
 		}
+
+		ClientToServer packet;
+		int retval = RecvPacketFromClient(packet, clientSock);
+
+		if (retval == SOCKET_ERROR)
+		{
+			break;
+		}
+		else if (retval == 0)
+		{
+			break;
+		}
+		else
+		{
+			mPackets.push_back(packet);
+		}
+	}
+
+	auto iter = std::find(mClientSockets.begin(), mClientSockets.end(), clientSock);
+	if (iter != mClientSockets.end())
+	{
+		LOG("Client {0} disconnected.", clientNum);
+		mClientSockets.erase(iter);
+	}
+	else
+	{
+		LOG("There is no client socket in vector.");
 	}
 }
 
@@ -166,4 +193,11 @@ void Server::SendPacketToClient(const ServerToClient& packet, const TCPSocketPtr
 			sock->Send(&packet, sizeof(packet));
 		}
 	}
+}
+
+int Server::RecvPacketFromClient(ClientToServer& outPacket, const TCPSocketPtr& target)
+{
+	int retval = target->Recv(&outPacket, sizeof(outPacket), MSG_WAITALL);
+
+	return retval;
 }
