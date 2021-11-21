@@ -38,10 +38,12 @@
 #include <unordered_map>
 #include <functional>
 #include <algorithm>
+#include <deque>
 
 using std::string;
 using std::shared_ptr;
 using std::unique_ptr;
 using std::vector;
+using std::deque;
 using std::array;
 using std::unordered_map;
