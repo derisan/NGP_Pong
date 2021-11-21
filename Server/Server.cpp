@@ -11,9 +11,11 @@ bool Server::Init()
 {
 	mIsAllHelloPacketSent = CreateEvent(NULL, NULL, FALSE, NULL);
 
+	InitializeCriticalSection(&mCS);
+
 	//윈속 초기화
 	SocketUtil::StaticInit();
-
+		
 	CreateGameWorld();
 
 	// 플레이어 접속 대기
@@ -25,6 +27,8 @@ bool Server::Init()
 void Server::Shutdown()
 {
 	CloseHandle(mIsAllHelloPacketSent);
+
+	DeleteCriticalSection(&mCS);
 
 	// 윈속 제거 
 	SocketUtil::StaticShutdown();
@@ -42,7 +46,20 @@ void Server::Run()
 	// 게임시작~
 	while (true)
 	{
+		EnterCriticalSection(&mCS);
+		if (!mPackets.empty())
+		{
+			ClientToServer packet = mPackets.front();
+			mPackets.pop_front();
+			LOG("Client {0} send{1}", packet.ClientNum, packet.YDirection);
 
+		}
+		else
+		{
+			LeaveCriticalSection(&mCS);
+			continue;
+		}
+		
 	}
 }
 

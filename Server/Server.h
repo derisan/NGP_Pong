@@ -34,5 +34,7 @@ private:
     HANDLE mIsAllHelloPacketSent;
 
     deque<ClientToServer> mPackets;
+
+    CRITICAL_SECTION mCS;
 };
 
