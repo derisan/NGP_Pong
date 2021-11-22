@@ -51,6 +51,16 @@ void GameScene::Enter()
 	{
 		ASSERT(nullptr, "Cannot convert to nonblocking socket.");
 	}
+
+	// Hack for resolving deadlock
+	{
+		ClientToServer packet;
+
+		packet.ClientNum = mClientNum;
+		packet.YDirection = 0.0f;
+
+		mOwner->SendPacketToServer(packet);
+	}
 }
 
 void GameScene::Exit()
@@ -167,5 +177,21 @@ void GameScene::ProcessGameStartPacket(const ServerToClient& packet)
 
 void GameScene::ProcessUpdatePacket(const ServerToClient& packet)
 {
-	
+	{
+		auto leftPaddle = mOwner->GetEntity(packet.LeftPaddleID);
+		auto& transform = leftPaddle->GetComponent<TransformComponent>();
+		transform.Position = packet.LeftPaddlePosition;
+	}
+
+	{
+		auto rightPaddle = mOwner->GetEntity(packet.RightPaddleID);
+		auto& transform = rightPaddle->GetComponent<TransformComponent>();
+		transform.Position = packet.RightPaddlePosition;
+	}
+
+	{
+		auto ballOne = mOwner->GetEntity(packet.BallOneID);
+		auto& transform = ballOne->GetComponent<TransformComponent>();
+		transform.Position = packet.BallOnePosition;
+	}
 }
