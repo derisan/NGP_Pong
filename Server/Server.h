@@ -28,7 +28,7 @@ private:
     void UpdateBallsPosition();
 
 private:
-    static const int MAXIMUM_PLAYER_NUM = 1;
+    static const int MAXIMUM_PLAYER_NUM = 2;
 
     vector<TCPSocketPtr> mClientSockets;
 

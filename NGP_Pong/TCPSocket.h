@@ -17,7 +17,6 @@ public:
 	TCPSocketPtr Accept(SocketAddress& outAddr);
 	int Send(const void* data, int len, int flags = 0);
 	int Recv(void* data, int len, int flags = 0);
-	int SetNonBlockingMode(bool value);
 
 private:
 	TCPSocket(SOCKET sock)

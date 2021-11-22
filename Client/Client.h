@@ -22,7 +22,7 @@ public:
 	const string& GetStringInput() const { return mStringInput; }
 	string& GetStringInput() { return mStringInput; }
 
-	int RecvPacketFromServer(ServerToClient& outPacket);
+	void RecvPacketFromServer(ServerToClient& outPacket);
 	void SendPacketToServer(const ClientToServer& packet);
 
 private:
