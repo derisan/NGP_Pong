@@ -49,12 +49,26 @@ void Server::Run()
 		EnterCriticalSection(&mCS);
 		if (!mPackets.empty())
 		{
-			ClientToServer packet = mPackets.front();
+			ClientToServer ctsPacket = mPackets.front();
 			mPackets.pop_front();
 
 			LeaveCriticalSection(&mCS);
+			
+			UpdatePaddlesPosition();
+			UpdateBallsPosition();
 
-			LOG("Client {0} send {1}", packet.ClientNum, packet.YDirection);
+			ServerToClient stcPacket;
+
+			stcPacket.PType = PacketType::Update;
+			stcPacket.ClientNum = -1;
+			stcPacket.LeftPaddleID = LEFT_PADDLE_ID;
+			stcPacket.LeftPaddlePosition = GetEntity(LEFT_PADDLE_ID)->GetComponent<TransformComponent>().Position;
+			stcPacket.RightPaddleID = RIGHT_PADDLE_ID;
+			stcPacket.RightPaddlePosition = GetEntity(RIGHT_PADDLE_ID)->GetComponent<TransformComponent>().Position;
+			stcPacket.BallOneID = BALL_ONE_ID;
+			stcPacket.BallOnePosition = GetEntity(BALL_ONE_ID)->GetComponent<TransformComponent>().Position;
+
+			SendPacketToClient(stcPacket);
 		}
 		else
 		{
@@ -218,4 +232,34 @@ int Server::RecvPacketFromClient(ClientToServer& outPacket, const TCPSocketPtr& 
 	int retval = target->Recv(&outPacket, sizeof(outPacket), MSG_WAITALL);
 
 	return retval;
+}
+
+void Server::UpdatePaddlesPosition()
+{
+	auto view = mRegistry.view<Paddle>();
+
+	for (auto entity : view)
+	{
+		Entity e = { entity, this };
+
+		auto& transform = e.GetComponent<TransformComponent>();
+		auto& movement = e.GetComponent<MovementComponent>();
+
+		Systems::UpdatePosition(movement.Speed, movement.Direction, transform.Position);
+	}
+}
+
+void Server::UpdateBallsPosition()
+{
+	auto view = mRegistry.view<Ball>();
+
+	for (auto entity : view)
+	{
+		Entity e = { entity, this };
+
+		auto& transform = e.GetComponent<TransformComponent>();
+		auto& movement = e.GetComponent<MovementComponent>();
+
+		Systems::UpdatePosition(movement.Speed, movement.Direction, transform.Position);
+	}
 }

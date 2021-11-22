@@ -107,7 +107,7 @@ bool LoginScene::Connects()
 {
 	TCPSocketPtr& sock = mOwner->GetClientSocket();
 
-	SocketAddress serveraddr(mOwner->SERVER_IP, mOwner->SERVER_PORT);
+	SocketAddress serveraddr(mOwner->GetStringInput(), mOwner->SERVER_PORT);
 
 	if (sock->Connect(serveraddr) != SOCKET_ERROR)
 	{

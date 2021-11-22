@@ -18,6 +18,8 @@ public:
 	Entity* CreatePaddle(uint8_t id);
 	Entity* CreateBall(uint8_t id);
 
+	Entity* GetEntity(uint8_t id);
+
 	const int SERVER_PORT = 9000;
 	const char* SERVER_IP = "127.0.0.1";
 

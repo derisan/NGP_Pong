@@ -24,6 +24,9 @@ private:
 
     int RecvPacketFromClient(ClientToServer& outPacket, const TCPSocketPtr& target);
 
+    void UpdatePaddlesPosition();
+    void UpdateBallsPosition();
+
 private:
     static const int MAXIMUM_PLAYER_NUM = 2;
 

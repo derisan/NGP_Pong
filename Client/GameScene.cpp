@@ -83,7 +83,7 @@ void GameScene::Update(float deltaTime)
 {
 	ServerToClient packet;
 
-	//mOwner->RecvPacketFromServer(packet);
+	mOwner->RecvPacketFromServer(packet);
 
 	if (packet.PType == PacketType::Update)
 	{

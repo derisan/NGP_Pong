@@ -41,3 +41,17 @@ Entity* Game::CreateBall(uint8_t id)
 
 	return e;
 }
+
+Entity* Game::GetEntity(uint8_t id)
+{
+	auto iter = mEntities.find(id);
+
+	if (iter != mEntities.end())
+	{
+		return iter->second;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
