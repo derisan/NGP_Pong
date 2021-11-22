@@ -15,7 +15,7 @@ bool Server::Init()
 
 	//윈속 초기화
 	SocketUtil::StaticInit();
-		
+
 	CreateGameWorld();
 
 	// 플레이어 접속 대기
@@ -47,14 +47,24 @@ void Server::Run()
 	while (true)
 	{
 		EnterCriticalSection(&mCS);
-		if (!mPackets.empty())
-		{
-			ClientToServer ctsPacket = mPackets.front();
-			mPackets.pop_front();
 
+		auto numPackets = mPackets.size();
+		if (numPackets >= mClientSockets.size())
+		{
+			if (numPackets == 0)
+			{
+				LOG("All clients disconnected. Quit server.");
+				LeaveCriticalSection(&mCS);
+				break;
+			}
+
+			for (const auto& packet : mPackets)
+			{
+				UpdatePaddlesPosition(packet);
+			}
+			mPackets.clear();
 			LeaveCriticalSection(&mCS);
 			
-			UpdatePaddlesPosition();
 			UpdateBallsPosition();
 
 			ServerToClient stcPacket;
@@ -105,9 +115,9 @@ void Server::WaitAllPlayers()
 	while (clientNum < MAXIMUM_PLAYER_NUM)
 	{
 		TCPSocketPtr clientSocket = listenSock->Accept(clientaddr);
-		
+
 		LOG("클라이언트 접속: {0}", clientNum);
-		
+
 		// 클라이언트별 스레드 생성.
 		mClientThreads.emplace_back(&Server::ClientThreadFunc, this, clientSocket, clientNum);
 
@@ -148,7 +158,7 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 	}
 
 	while (1)
-	{	
+	{
 		// 클라이언트 패킷 수신
 		bool shouldQuit = !mIsRunning;
 
@@ -170,7 +180,9 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 		}
 		else
 		{
+			EnterCriticalSection(&mCS);
 			mPackets.push_back(packet);
+			LeaveCriticalSection(&mCS);
 		}
 	}
 
@@ -234,19 +246,38 @@ int Server::RecvPacketFromClient(ClientToServer& outPacket, const TCPSocketPtr& 
 	return retval;
 }
 
-void Server::UpdatePaddlesPosition()
+void Server::UpdatePaddlesPosition(const ClientToServer& packet)
 {
-	auto view = mRegistry.view<Paddle>();
+	int id = -1;
 
-	for (auto entity : view)
+	switch (packet.ClientNum)
 	{
-		Entity e = { entity, this };
+	case 0:
+		id = LEFT_PADDLE_ID;
+		break;
 
-		auto& transform = e.GetComponent<TransformComponent>();
-		auto& movement = e.GetComponent<MovementComponent>();
+	case 1:
+		id = RIGHT_PADDLE_ID;
+		break;
 
-		Systems::UpdatePosition(movement.Speed, movement.Direction, transform.Position);
+	default:
+		break;
 	}
+
+	auto paddle = GetEntity(id);
+
+	if (paddle == nullptr)
+	{
+		LOG("Server::UpdatePaddlesPosition - client id({0})", packet.ClientNum);
+		return;
+	}
+
+	auto& transform = paddle->GetComponent<TransformComponent>();
+	auto& movement = paddle->GetComponent<MovementComponent>();
+
+	movement.Direction.y = packet.YDirection;
+
+	Systems::UpdatePosition(movement.Speed, movement.Direction, transform.Position);
 }
 
 void Server::UpdateBallsPosition()

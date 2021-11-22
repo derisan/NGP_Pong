@@ -24,7 +24,7 @@ private:
 
     int RecvPacketFromClient(ClientToServer& outPacket, const TCPSocketPtr& target);
 
-    void UpdatePaddlesPosition();
+    void UpdatePaddlesPosition(const ClientToServer& packet);
     void UpdateBallsPosition();
 
 private:
