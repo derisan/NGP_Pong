@@ -99,3 +99,20 @@ int TCPSocket::Recv(void* data, int len, int flags /*= 0*/)
 		return byteRead;
 	}
 }
+
+int TCPSocket::SetNonBlockingMode(bool value)
+{
+	u_long on = value ? 1 : 0;
+
+	int retval = ioctlsocket(mSocket, FIONBIO, &on);
+
+	if (retval == SOCKET_ERROR)
+	{
+		SocketUtil::ReportError("TCPSocket::SetNonBlockingMode");
+		return SOCKET_ERROR;
+	}
+	else
+	{
+		return retval;
+	}
+}

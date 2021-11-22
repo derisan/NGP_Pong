@@ -26,6 +26,11 @@ void SocketUtil::ReportError(const char* desc)
 	LPVOID lpMsgBuf;
 	DWORD errorNum = GetLastError();
 
+	if (errorNum == WSAEWOULDBLOCK)
+	{
+		return;
+	}
+
 	FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM |

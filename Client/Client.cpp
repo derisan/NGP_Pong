@@ -131,20 +131,35 @@ void Client::RenderWaitingScreen()
 	SDL_RenderPresent(mRenderer);
 }
 
-void Client::RecvPacketFromServer(ServerToClient& outPacket)
+int Client::RecvPacketFromServer(ServerToClient& outPacket)
 {
 	if (mClientSocket == nullptr)
 	{
-		return;
+		LOG("Client::RecvPacketFromServer - socket is nullptr.");
+		return SOCKET_EMPTY;
 	}
 
 	int retval = mClientSocket->Recv(&outPacket, sizeof(outPacket));
 
-	if (retval == SOCKET_ERROR || retval == 0)
+	if (retval == SOCKET_ERROR)
 	{
-		LOG("Client::RecvPacketFromServer");
+		if (SocketUtil::GetLastError() == WSAEWOULDBLOCK)
+		{
+			return WOULD_BLOCK;
+		}
+
 		mIsRunning = false;
+		LOG("Client::RecvPacketFromServer");
+		return SOCKET_ERROR;
 	}
+	else if (retval == 0)
+	{
+		LOG("Server closed. Quit client.");
+		mIsRunning = false;
+		return NORMAL_CLOSE;
+	}
+
+	return NO_ERROR;
 }
 
 void Client::SendPacketToServer(const ClientToServer& packet)

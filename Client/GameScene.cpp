@@ -27,28 +27,29 @@ void GameScene::Enter()
 {
 	ServerToClient packet;
 
-	mOwner->RecvPacketFromServer(packet);
+	int retval = mOwner->RecvPacketFromServer(packet);
 
-	if (packet.PType == PacketType::Hello)
+	// Hello Packet
+	if (retval == NO_ERROR)
 	{
 		ProcessPacket(packet);
-	}
-	else
-	{
-		ASSERT(nullptr, "Client should recv hello packet first.");
 	}
 
 	mOwner->RenderWaitingScreen();
 
-	mOwner->RecvPacketFromServer(packet);
+	retval = mOwner->RecvPacketFromServer(packet);
 
-	if (packet.PType == PacketType::GameStart)
+	// GameStart Packet	
+	if (retval == NO_ERROR)
 	{
 		ProcessPacket(packet);
 	}
-	else
+
+	retval = mOwner->GetClientSocket()->SetNonBlockingMode(true);
+
+	if (retval == SOCKET_ERROR)
 	{
-		ASSERT(nullptr, "Client should recv game start packet.");
+		ASSERT(nullptr, "Cannot convert to nonblocking socket.");
 	}
 }
 
@@ -83,9 +84,13 @@ void GameScene::Update(float deltaTime)
 {
 	ServerToClient packet;
 
-	mOwner->RecvPacketFromServer(packet);
+	int retval = mOwner->RecvPacketFromServer(packet);
 
-	if (packet.PType == PacketType::Update)
+	if (retval == WOULD_BLOCK)
+	{
+		return;
+	}
+	else if (retval == NO_ERROR)
 	{
 		ProcessPacket(packet);
 	}
@@ -157,10 +162,10 @@ void GameScene::ProcessHelloPacket(const ServerToClient& packet)
 
 void GameScene::ProcessGameStartPacket(const ServerToClient& packet)
 {
-	LOG("Game start!!!");
+	
 }
 
 void GameScene::ProcessUpdatePacket(const ServerToClient& packet)
 {
-
+	
 }
