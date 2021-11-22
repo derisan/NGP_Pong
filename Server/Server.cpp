@@ -82,7 +82,7 @@ void Server::WaitAllPlayers()
 {
 	// 家南 积己
 	TCPSocketPtr listenSock = SocketUtil::CreateTCPSocket();
-	SocketAddress serveraddr(SERVER_IP, SERVER_PORT);
+	SocketAddress serveraddr(SERVER_PORT);
 
 	//家南 Bind
 	if (listenSock->Bind(serveraddr) == SOCKET_ERROR)

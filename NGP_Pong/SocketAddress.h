@@ -25,6 +25,15 @@ public:
 		GetAsSockAddrIn()->sin_addr.s_addr = inet_addr(address.c_str());
 	}
 
+	SocketAddress(uint16_t port)
+	{
+		ZeroMemory(&mSockAddr, sizeof(mSockAddr));
+
+		GetAsSockAddrIn()->sin_family = AF_INET;
+		GetAsSockAddrIn()->sin_port = htons(port);
+		GetAsSockAddrIn()->sin_addr.s_addr = INADDR_ANY;
+	}
+
 	uint32_t GetSize() const { return sizeof(mSockAddr); }
 
 	string ToString() const;
