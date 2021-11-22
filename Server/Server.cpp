@@ -170,7 +170,9 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 		}
 		else
 		{
+			EnterCriticalSection(&mCS);
 			mPackets.push_back(packet);
+			LeaveCriticalSection(&mCS);
 		}
 	}
 
