@@ -9,6 +9,8 @@ Server::Server()
 
 bool Server::Init()
 {
+	LOG("Server on duty.");
+
 	mIsAllHelloPacketSent = CreateEvent(NULL, NULL, FALSE, NULL);
 
 	InitializeCriticalSection(&mCS);
@@ -115,6 +117,7 @@ void Server::WaitAllPlayers()
 	while (clientNum < MAXIMUM_PLAYER_NUM)
 	{
 		TCPSocketPtr clientSocket = listenSock->Accept(clientaddr);
+		clientSocket->TurnOffNagleAlgorithm(true);
 
 		LOG("클라이언트 접속: {0}", clientNum);
 

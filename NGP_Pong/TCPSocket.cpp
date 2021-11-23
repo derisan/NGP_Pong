@@ -99,3 +99,20 @@ int TCPSocket::Recv(void* data, int len, int flags /*= 0*/)
 		return byteRead;
 	}
 }
+
+int TCPSocket::TurnOffNagleAlgorithm(bool value)
+{
+	u_long opt = value ? 1 : 0;
+
+	int retval = setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const char*>(&opt), sizeof(opt));
+
+	if (retval == SOCKET_ERROR)
+	{
+		SocketUtil::ReportError("TCPSocket::SetNagleAlgorithm");
+		return SOCKET_ERROR;
+	}
+	else
+	{
+		return retval;
+	}
+}

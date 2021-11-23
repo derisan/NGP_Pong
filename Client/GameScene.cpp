@@ -8,6 +8,7 @@ GameScene* GameScene::sInstance;
 GameScene::GameScene(Client* client)
 	: Scene(client)
 	, mClientNum(-1)
+	, mShouldSend(true)
 {
 
 }
@@ -69,6 +70,11 @@ void GameScene::Exit()
 
 void GameScene::ProcessInput(const uint8_t* keystate)
 {
+	if (mShouldSend == false)
+	{
+		return;
+	}
+
 	float yDirection = 0.0f;
 
 	if (keystate[SDL_SCANCODE_W])
@@ -91,6 +97,12 @@ void GameScene::ProcessInput(const uint8_t* keystate)
 
 void GameScene::Update(float deltaTime)
 {
+	if (mShouldSend == false)
+	{
+		mShouldSend = true;
+		return;
+	}
+
 	ServerToClient packet;
 
 	mOwner->RecvPacketFromServer(packet);

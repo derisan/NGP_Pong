@@ -26,4 +26,6 @@ private:
 	static GameScene* sInstance;
 
 	int mClientNum;
+
+	bool mShouldSend;
 };

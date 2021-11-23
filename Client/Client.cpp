@@ -25,6 +25,7 @@ bool Client::Init()
 
 	// 努扼捞攫飘 家南 积己
 	mClientSocket = SocketUtil::CreateTCPSocket();
+	mClientSocket->TurnOffNagleAlgorithm(true);
 
 	// SDL Window, Renderer 积己
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
