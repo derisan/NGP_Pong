@@ -27,6 +27,7 @@ private:
     void UpdatePaddlesPosition(const ClientToServer& packet);
     void UpdateBallsPosition();
     void CheckPaddleAndWall();
+    void CheckBallAndWall();
 
 private:
     static const int MAXIMUM_PLAYER_NUM = 2;

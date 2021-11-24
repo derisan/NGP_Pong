@@ -66,9 +66,10 @@ void Server::Run()
 			}
 			mPackets.clear();
 			LeaveCriticalSection(&mCS);
-			
+
 			UpdateBallsPosition();
 			CheckPaddleAndWall();
+			CheckBallAndWall();
 
 			ServerToClient stcPacket;
 
@@ -311,7 +312,7 @@ void Server::CheckPaddleAndWall()
 		auto& rect = paddle.GetComponent<RectComponent>();
 
 		auto& pos = transform.Position;
-		
+
 		if (pos.y <= 0.0f)
 		{
 			pos.y = 0.0f;
@@ -320,6 +321,36 @@ void Server::CheckPaddleAndWall()
 		if (pos.y + rect.Height >= WINDOW_HEIGHT)
 		{
 			pos.y = WINDOW_HEIGHT - rect.Height;
+		}
+	}
+}
+
+void Server::CheckBallAndWall()
+{
+	auto balls = mRegistry.view<Ball>();
+
+	for (auto entity : balls)
+	{
+		Entity ball = Entity(entity, this);
+
+		auto& transform = ball.GetComponent<TransformComponent>();
+		auto& rect = ball.GetComponent<RectComponent>();
+		auto& movement = ball.GetComponent<MovementComponent>();
+
+		auto& pos = transform.Position;
+
+		if (pos.y <= 0.0f || pos.y + rect.Height >= WINDOW_HEIGHT)
+		{
+			movement.Direction.y *= -1.0f;
+		}
+
+		if (pos.x <= 0.0f)
+		{
+			// left side player lose
+		}
+		else if (pos.x + rect.Width >= WINDOW_WIDTH)
+		{
+			// right side player lose
 		}
 	}
 }
