@@ -378,5 +378,27 @@ void Server::CheckPaddleAndBall()
 			static_cast<int>(paddleTransform.Position.x), static_cast<int>(paddleTransform.Position.y),
 			static_cast<int>(paddleRect.Width), static_cast<int>(paddleRect.Height)
 		};
+
+		for (auto bEntitiy : balls)
+		{
+			// 볼가져오기
+			Entity ball = Entity(bEntitiy, this);
+
+			auto& ballTrasnfrom = ball.GetComponent< TransformComponent>();
+			auto& ballRect = ball.GetComponent<RectComponent>();
+
+			SDL_Rect bRect = {
+			static_cast<int>(ballTrasnfrom.Position.x), static_cast<int>(ballTrasnfrom.Position.y),
+			static_cast<int>(ballRect.Width), static_cast<int>(ballRect.Height)
+			};
+
+			bool isCollide = Systems::Intersects(pRect, bRect);
+
+			if (isCollide)
+			{
+				auto& ballMovement = ball.GetComponent<MovementComponent>();
+				ballMovement.Direction *= -1.0f;
+			}
+		}
 	}
 }

@@ -28,6 +28,7 @@ private:
     void UpdateBallsPosition();
     void CheckPaddleAndWall();
     void CheckBallAndWall();
+    void CheckPaddleAndBall();
 
 private:
     static const int MAXIMUM_PLAYER_NUM = 2;
