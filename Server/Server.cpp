@@ -397,7 +397,7 @@ void Server::CheckPaddleAndBall()
 			if (isCollide)
 			{
 				auto& ballMovement = ball.GetComponent<MovementComponent>();
-				ballMovement.Direction *= -1.0f;
+				ballMovement.Direction.x *= -1.0f;
 			}
 		}
 	}
