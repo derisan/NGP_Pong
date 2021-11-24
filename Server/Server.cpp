@@ -68,6 +68,7 @@ void Server::Run()
 			LeaveCriticalSection(&mCS);
 			
 			UpdateBallsPosition();
+			CheckPaddleAndWall();
 
 			ServerToClient stcPacket;
 
@@ -295,5 +296,30 @@ void Server::UpdateBallsPosition()
 		auto& movement = e.GetComponent<MovementComponent>();
 
 		Systems::UpdatePosition(movement.Speed, movement.Direction, transform.Position);
+	}
+}
+
+void Server::CheckPaddleAndWall()
+{
+	auto paddles = mRegistry.view<Paddle>();
+
+	for (auto entity : paddles)
+	{
+		Entity paddle = Entity(entity, this);
+
+		auto& transform = paddle.GetComponent<TransformComponent>();
+		auto& rect = paddle.GetComponent<RectComponent>();
+
+		auto& pos = transform.Position;
+		
+		if (pos.y <= 0.0f)
+		{
+			pos.y = 0.0f;
+		}
+
+		if (pos.y + rect.Height >= WINDOW_HEIGHT)
+		{
+			pos.y = WINDOW_HEIGHT - rect.Height;
+		}
 	}
 }
