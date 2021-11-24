@@ -70,6 +70,7 @@ void Server::Run()
 			UpdateBallsPosition();
 			CheckPaddleAndWall();
 			CheckBallAndWall();
+			CheckPaddleAndBall();
 
 			ServerToClient stcPacket;
 
@@ -351,6 +352,53 @@ void Server::CheckBallAndWall()
 		else if (pos.x + rect.Width >= WINDOW_WIDTH)
 		{
 			// right side player lose
+		}
+	}
+}
+
+
+void Server::CheckPaddleAndBall()
+{
+	// 패들 가져오기
+	auto paddles = mRegistry.view<Paddle>();
+	// 공가져오기 
+	auto balls = mRegistry.view<Ball>();
+
+	// 패들에 맞는 출돌 박스 설정
+	for (auto pEntity : paddles)
+	{
+		Entity paddle = Entity(pEntity, this);
+
+		// 패들 위치(x,y)
+		auto& paddleTransform = paddle.GetComponent<TransformComponent>();
+		// 패들 너비 폭
+		auto& paddleRect = paddle.GetComponent<RectComponent>();
+		// 충돌처리할 사각형
+		SDL_Rect pRect = {
+			static_cast<int>(paddleTransform.Position.x), static_cast<int>(paddleTransform.Position.y),
+			static_cast<int>(paddleRect.Width), static_cast<int>(paddleRect.Height)
+		};
+
+		for (auto bEntitiy : balls)
+		{
+			// 볼가져오기
+			Entity ball = Entity(bEntitiy, this);
+
+			auto& ballTrasnfrom = ball.GetComponent< TransformComponent>();
+			auto& ballRect = ball.GetComponent<RectComponent>();
+
+			SDL_Rect bRect = {
+			static_cast<int>(ballTrasnfrom.Position.x), static_cast<int>(ballTrasnfrom.Position.y),
+			static_cast<int>(ballRect.Width), static_cast<int>(ballRect.Height)
+			};
+
+			bool isCollide = Systems::Intersects(pRect, bRect);
+
+			if (isCollide)
+			{
+				auto& ballMovement = ball.GetComponent<MovementComponent>();
+				ballMovement.Direction *= -1.0f;
+			}
 		}
 	}
 }
