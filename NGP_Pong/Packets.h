@@ -13,10 +13,18 @@ enum class PacketType
 	GameOver    // 게임 오버 신호 패킷
 };
 
+enum class WhoLose
+{
+	Left,
+	Right,
+	None
+};
+
 struct ServerToClient 
 {
 	PacketType PType;
 	int ClientNum;
+	WhoLose Who;
 
 	uint8_t LeftPaddleID;
 	Vector2 LeftPaddlePosition;
