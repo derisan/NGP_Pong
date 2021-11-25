@@ -21,6 +21,11 @@ public:
 
 	const string& GetStringInput() const { return mStringInput; }
 	string& GetStringInput() { return mStringInput; }
+	void SetStringInput(const string& s) { mStringInput = s; }
+
+	TTF_Font* GetFont() { return mFont; }
+
+	void DrawFont(const string& text, int x, int y, const SDL_Color& color = SDL_Color{ 0, 0, 0 });
 
 	void RecvPacketFromServer(ServerToClient& outPacket);
 	void SendPacketToServer(const ClientToServer& packet);
@@ -40,5 +45,7 @@ private:
 	uint32_t mTicksCount;
 
 	string mStringInput;
+
+	TTF_Font* mFont;
 };
 

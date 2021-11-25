@@ -24,9 +24,17 @@ private:
 	void ProcessGameOverPacket(const ServerToClient& packet);
 
 private:
+	struct Score
+	{
+		int Left;
+		int Right;
+	};
+
 	static GameScene* sInstance;
 
 	int mClientNum;
 
 	bool mShouldSend;
+
+	Score mScores;
 };

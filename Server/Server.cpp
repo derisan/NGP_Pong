@@ -358,14 +358,11 @@ WhoLose Server::CheckBallAndWall()
 
 		if (pos.x <= 0.0f)
 		{
-			// 왼쪽 승
 			return WhoLose::Left;
 		}
 		else if (pos.x + rect.Width >= WINDOW_WIDTH)
 		{
-			// 오른쪽 패
 			return WhoLose::Right;
-			
 		}
 	}
 
@@ -395,10 +392,10 @@ void Server::CheckPaddleAndBall()
 			static_cast<int>(paddleRect.Width), static_cast<int>(paddleRect.Height)
 		};
 
-		for (auto bEntitiy : balls)
+		for (auto bEntity : balls)
 		{
 			// 볼가져오기
-			Entity ball = Entity(bEntitiy, this);
+			Entity ball = Entity(bEntity, this);
 
 			auto& ballTrasnfrom = ball.GetComponent< TransformComponent>();
 			auto& ballRect = ball.GetComponent<RectComponent>();
@@ -419,21 +416,8 @@ void Server::CheckPaddleAndBall()
 	}
 }
 
-
 void Server::ResetGameWorld()
 {
-	{
-		auto paddle = GetEntity(LEFT_PADDLE_ID);
-		auto& transform = paddle->GetComponent<TransformComponent>();
-		transform.Position = Vector2(0.0f, (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
-	}
-
-	{
-		auto paddle = GetEntity(RIGHT_PADDLE_ID);
-		auto& transform = paddle->GetComponent<TransformComponent>();
-		transform.Position = Vector2((WINDOW_WIDTH - PADDLE_WIDTH), (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
-	}
-
 	{
 		auto ball = GetEntity(BALL_ONE_ID);
 		auto& transform = ball->GetComponent<TransformComponent>();

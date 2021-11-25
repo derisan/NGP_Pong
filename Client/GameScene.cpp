@@ -9,6 +9,7 @@ GameScene::GameScene(Client* client)
 	: Scene(client)
 	, mClientNum(-1)
 	, mShouldSend(true)
+	, mScores{ 0, 0 }
 {
 
 }
@@ -65,7 +66,7 @@ void GameScene::Enter()
 
 void GameScene::Exit()
 {
-	
+
 }
 
 void GameScene::ProcessInput(const uint8_t* keystate)
@@ -119,6 +120,12 @@ void GameScene::Render(SDL_Renderer* renderer)
 
 		Systems::DrawRect(renderer, rect.Width, rect.Height, transform.Position);
 	}
+
+	mOwner->DrawFont(std::to_string(mScores.Left), mOwner->WINDOW_WIDTH / 4,
+		50, SDL_Color{ 255, 255, 0 });
+
+	mOwner->DrawFont(std::to_string(mScores.Right), mOwner->WINDOW_WIDTH - (mOwner->WINDOW_WIDTH / 4),
+		50, SDL_Color{ 255, 255, 0 });
 }
 
 void GameScene::ProcessPacket(const ServerToClient& packet)
@@ -203,5 +210,20 @@ void GameScene::ProcessUpdatePacket(const ServerToClient& packet)
 
 void GameScene::ProcessGameOverPacket(const ServerToClient& packet)
 {
-	LOG("Game over! Reset the world!");
+	switch (packet.Who)
+	{
+	case WhoLose::Left:
+		mScores.Right += 1;
+		break;
+
+	case WhoLose::Right:
+		mScores.Left += 1;
+		break;
+
+	case WhoLose::None:
+		break;
+
+	default:
+		break;
+	}
 }

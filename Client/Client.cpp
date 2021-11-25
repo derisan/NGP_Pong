@@ -14,6 +14,7 @@ Client::Client()
 	, mActiveScene(nullptr)
 	, mTicksCount(0)
 	, mStringInput()
+	, mFont(nullptr)
 {
 
 }
@@ -60,6 +61,15 @@ bool Client::Init()
 		return false;
 	}
 
+	mFont = TTF_OpenFont("Assets/lazy.ttf", 72);
+	if (mFont == nullptr)
+	{
+		SDL_Log("Unable to load font: %s", SDL_GetError());
+		ASSERT(nullptr, "Failed to load font.");
+	}
+
+	SDL_StartTextInput();
+
 	TextureManager::StaticInit(mRenderer);
 	
 	mTicksCount = SDL_GetTicks();
@@ -76,6 +86,9 @@ bool Client::Init()
 
 void Client::Shutdown()
 {
+	TTF_CloseFont(mFont);
+	mFont = nullptr;
+
 	if (mActiveScene)
 	{
 		mActiveScene->Exit();
@@ -130,6 +143,27 @@ void Client::RenderWaitingScreen()
 		&rect, 0, nullptr, SDL_FLIP_NONE);
 
 	SDL_RenderPresent(mRenderer);
+}
+
+void Client::DrawFont(const string& text, int x, int y, const SDL_Color& color)
+{
+	if (mFont == nullptr)
+	{
+		LOG("No font available.");
+		return;
+	}
+
+	SDL_Surface* surf = TTF_RenderText_Solid(mFont, text.c_str(), color);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(mRenderer, surf);
+
+	SDL_Rect rect;
+	rect.x = x - (surf->w / 2);
+	rect.y = y - (surf->h / 2);
+	rect.w = surf->w;
+	rect.h = surf->h;
+	SDL_RenderCopy(mRenderer, texture, NULL, &rect);
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surf);
 }
 
 void Client::RecvPacketFromServer(ServerToClient& outPacket)

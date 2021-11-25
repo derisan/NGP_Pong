@@ -21,22 +21,11 @@ LoginScene* LoginScene::Get()
 
 LoginScene::LoginScene(Client* client)
 	: Scene(client)
-	, mFont(nullptr)
 	, mBackgroundTexture(nullptr)
 {}
 
 void LoginScene::Enter()
 {
-	mFont = TTF_OpenFont("Assets/lazy.ttf", 72);
-
-	if (mFont == nullptr)
-	{
-		SDL_Log("Unable to load font: %s", SDL_GetError());
-		ASSERT(nullptr, "Failed to load font.");
-	}
-
-	SDL_StartTextInput();
-
 	mBackgroundTexture = TextureManager::GetTexture("Assets/LoginBackground.png");
 
 	if (mBackgroundTexture == nullptr)
@@ -47,8 +36,7 @@ void LoginScene::Enter()
 
 void LoginScene::Exit()
 {
-	TTF_CloseFont(mFont);
-	mFont = nullptr;
+	mOwner->SetStringInput("");
 }
 
 void LoginScene::ProcessInput(const uint8_t* keystate)
@@ -87,19 +75,10 @@ void LoginScene::Render(SDL_Renderer* renderer)
 
 	if (text.size() > 0)
 	{
-		SDL_Surface* surf = TTF_RenderText_Solid(mFont, text.c_str(), SDL_Color{ 0, 0, 0 });
-		
-		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surf);
+		int x = mOwner->WINDOW_WIDTH / 2;
+		int y = mOwner->WINDOW_HEIGHT / 2;
 
-		SDL_Rect rect;
-		rect.x = (mOwner->WINDOW_WIDTH / 2) - (surf->w / 2);
-		rect.y = mOwner->WINDOW_HEIGHT / 2;
-		rect.w = surf->w;
-		rect.h = surf->h;
-		SDL_RenderCopy(renderer, texture, NULL, &rect);
-
-		SDL_DestroyTexture(texture);
-		SDL_FreeSurface(surf);
+		mOwner->DrawFont(text, x, y);
 	}
 }
 

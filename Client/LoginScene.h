@@ -24,7 +24,5 @@ private:
 private:
 	static LoginScene* sInstance;
 
-	TTF_Font* mFont;
-
 	SDL_Texture* mBackgroundTexture;
 };
