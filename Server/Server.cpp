@@ -69,12 +69,23 @@ void Server::Run()
 
 			UpdateBallsPosition();
 			CheckPaddleAndWall();
-			CheckBallAndWall();
 			CheckPaddleAndBall();
+			WhoLose who = CheckBallAndWall();
 
 			ServerToClient stcPacket;
 
-			stcPacket.PType = PacketType::Update;
+			if (who == WhoLose::None)
+			{
+				stcPacket.PType = PacketType::Update;
+			}
+			else
+			{
+				ResetGameWorld();
+
+				stcPacket.PType = PacketType::GameOver;
+				stcPacket.Who = who;
+			}
+
 			stcPacket.ClientNum = -1;
 			stcPacket.LeftPaddleID = LEFT_PADDLE_ID;
 			stcPacket.LeftPaddlePosition = GetEntity(LEFT_PADDLE_ID)->GetComponent<TransformComponent>().Position;
@@ -326,7 +337,7 @@ void Server::CheckPaddleAndWall()
 	}
 }
 
-void Server::CheckBallAndWall()
+WhoLose Server::CheckBallAndWall()
 {
 	auto balls = mRegistry.view<Ball>();
 
@@ -347,13 +358,18 @@ void Server::CheckBallAndWall()
 
 		if (pos.x <= 0.0f)
 		{
-			// left side player lose
+			// ¿ÞÂÊ ½Â
+			return WhoLose::Left;
 		}
 		else if (pos.x + rect.Width >= WINDOW_WIDTH)
 		{
-			// right side player lose
+			// ¿À¸¥ÂÊ ÆÐ
+			return WhoLose::Right;
+			
 		}
 	}
+
+	return WhoLose::None;
 }
 
 
@@ -400,5 +416,29 @@ void Server::CheckPaddleAndBall()
 				ballMovement.Direction.x *= -1.0f;
 			}
 		}
+	}
+}
+
+
+void Server::ResetGameWorld()
+{
+	{
+		auto paddle = GetEntity(LEFT_PADDLE_ID);
+		auto& transform = paddle->GetComponent<TransformComponent>();
+		transform.Position = Vector2(0.0f, (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
+	}
+
+	{
+		auto paddle = GetEntity(RIGHT_PADDLE_ID);
+		auto& transform = paddle->GetComponent<TransformComponent>();
+		transform.Position = Vector2((WINDOW_WIDTH - PADDLE_WIDTH), (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
+	}
+
+	{
+		auto ball = GetEntity(BALL_ONE_ID);
+		auto& transform = ball->GetComponent<TransformComponent>();
+		auto& movement = ball->GetComponent<MovementComponent>();
+		transform.Position = Vector2((WINDOW_WIDTH / 2) - (BALL_WIDTH / 2), (WINDOW_HEIGHT / 2) - (BALL_WIDTH / 2));  // Center of screen
+		movement.Direction = Vector2(-1.0f, -1.0f); // Up-Left
 	}
 }
