@@ -19,6 +19,7 @@ private:
     void ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum); // 각 클라이언트로부터 패킷을 수신해 mPacketsFromClient에 삽입
   
     void CreateGameWorld();
+    void ResetGameWorld();
 
     void SendPacketToClient(const ServerToClient& packet, const TCPSocketPtr& target = nullptr);
 
@@ -27,8 +28,8 @@ private:
     void UpdatePaddlesPosition(const ClientToServer& packet);
     void UpdateBallsPosition();
     void CheckPaddleAndWall();
-    void CheckBallAndWall();
     void CheckPaddleAndBall();
+    WhoLose CheckBallAndWall();
 
 private:
     static const int MAXIMUM_PLAYER_NUM = 2;
