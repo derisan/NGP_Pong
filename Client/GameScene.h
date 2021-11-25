@@ -21,6 +21,7 @@ private:
 	void ProcessHelloPacket(const ServerToClient& packet);
 	void ProcessGameStartPacket(const ServerToClient& packet);
 	void ProcessUpdatePacket(const ServerToClient& packet);
+	void ProcessGameOverPacket(const ServerToClient& packet);
 
 private:
 	static GameScene* sInstance;

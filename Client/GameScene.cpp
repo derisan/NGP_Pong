@@ -107,10 +107,7 @@ void GameScene::Update(float deltaTime)
 
 	mOwner->RecvPacketFromServer(packet);
 
-	if (packet.PType == PacketType::Update)
-	{
-		ProcessPacket(packet);
-	}
+	ProcessPacket(packet);
 }
 
 void GameScene::Render(SDL_Renderer* renderer)
@@ -141,6 +138,7 @@ void GameScene::ProcessPacket(const ServerToClient& packet)
 		break;
 
 	case PacketType::GameOver:
+		ProcessGameOverPacket(packet);
 		break;
 
 	default:
@@ -201,4 +199,9 @@ void GameScene::ProcessUpdatePacket(const ServerToClient& packet)
 		auto& transform = ballOne->GetComponent<TransformComponent>();
 		transform.Position = packet.BallOnePosition;
 	}
+}
+
+void GameScene::ProcessGameOverPacket(const ServerToClient& packet)
+{
+	LOG("Game over! Reset the world!");
 }
