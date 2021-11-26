@@ -34,6 +34,9 @@ struct ServerToClient
 
 	uint8_t BallOneID;
 	Vector2 BallOnePosition;
+
+	uint8_t BallTwoID;
+	Vector2 BallTwoPosition;
 };
 
 struct ClientToServer

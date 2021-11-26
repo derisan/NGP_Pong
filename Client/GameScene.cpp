@@ -180,6 +180,13 @@ void GameScene::ProcessHelloPacket(const ServerToClient& packet)
 		auto& transform = ballOne->GetComponent<TransformComponent>();
 		transform.Position = packet.BallOnePosition;
 	}
+
+	// Create ball two
+	{
+		auto ballTwo = mOwner->CreateBall(packet.BallTwoID);
+		auto& transform = ballTwo->GetComponent<TransformComponent>();
+		transform.Position = packet.BallTwoPosition;
+	}
 }
 
 void GameScene::ProcessGameStartPacket(const ServerToClient& packet)
@@ -205,6 +212,12 @@ void GameScene::ProcessUpdatePacket(const ServerToClient& packet)
 		auto ballOne = mOwner->GetEntity(packet.BallOneID);
 		auto& transform = ballOne->GetComponent<TransformComponent>();
 		transform.Position = packet.BallOnePosition;
+	}
+
+	{
+		auto ballTwo = mOwner->GetEntity(packet.BallTwoID);
+		auto& transform = ballTwo->GetComponent<TransformComponent>();
+		transform.Position = packet.BallTwoPosition;
 	}
 }
 

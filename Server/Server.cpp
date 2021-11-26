@@ -93,6 +93,8 @@ void Server::Run()
 			stcPacket.RightPaddlePosition = GetEntity(RIGHT_PADDLE_ID)->GetComponent<TransformComponent>().Position;
 			stcPacket.BallOneID = BALL_ONE_ID;
 			stcPacket.BallOnePosition = GetEntity(BALL_ONE_ID)->GetComponent<TransformComponent>().Position;
+			stcPacket.BallTwoID = BALL_TWO_ID;
+			stcPacket.BallTwoPosition = GetEntity(BALL_TWO_ID)->GetComponent<TransformComponent>().Position;
 
 			SendPacketToClient(stcPacket);
 		}
@@ -166,6 +168,8 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 	packet.RightPaddlePosition = mEntities[RIGHT_PADDLE_ID]->GetComponent<TransformComponent>().Position;
 	packet.BallOneID = BALL_ONE_ID;
 	packet.BallOnePosition = mEntities[BALL_ONE_ID]->GetComponent<TransformComponent>().Position;
+	packet.BallTwoID = BALL_TWO_ID;
+	packet.BallTwoPosition = mEntities[BALL_TWO_ID]->GetComponent<TransformComponent>().Position;
 
 	SendPacketToClient(packet, clientSock);
 
@@ -238,6 +242,15 @@ void Server::CreateGameWorld()
 		auto& movement = ball->GetComponent<MovementComponent>();
 		transform.Position = Vector2((WINDOW_WIDTH / 2) - (BALL_WIDTH / 2), (WINDOW_HEIGHT / 2) - (BALL_WIDTH / 2));  // Center of screen
 		movement.Direction = Vector2(-1.0f, -1.0f); // Up-Left
+	}
+
+	// Create Ball two
+	{
+		auto ball = CreateBall(BALL_TWO_ID);
+		auto& transform = ball->GetComponent<TransformComponent>();
+		auto& movement = ball->GetComponent<MovementComponent>();
+		transform.Position = Vector2((WINDOW_WIDTH / 2) - (BALL_WIDTH / 2), (WINDOW_HEIGHT / 2) - (BALL_WIDTH / 2));  // Center of screen
+		movement.Direction = Vector2(1.0f, 1.0f); // Down-Right
 	}
 }
 
@@ -424,5 +437,13 @@ void Server::ResetGameWorld()
 		auto& movement = ball->GetComponent<MovementComponent>();
 		transform.Position = Vector2((WINDOW_WIDTH / 2) - (BALL_WIDTH / 2), (WINDOW_HEIGHT / 2) - (BALL_WIDTH / 2));  // Center of screen
 		movement.Direction = Vector2(-1.0f, -1.0f); // Up-Left
+	}
+
+	{
+		auto ball = GetEntity(BALL_TWO_ID);
+		auto& transform = ball->GetComponent<TransformComponent>();
+		auto& movement = ball->GetComponent<MovementComponent>();
+		transform.Position = Vector2((WINDOW_WIDTH / 2) - (BALL_WIDTH / 2), (WINDOW_HEIGHT / 2) - (BALL_WIDTH / 2));  // Center of screen
+		movement.Direction = Vector2(1.0f, 1.0f); // Down-Right
 	}
 }
