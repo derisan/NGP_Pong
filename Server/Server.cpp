@@ -454,6 +454,8 @@ void Server::CheckPaddleAndBall()
 			{
 				auto& ballMovement = ball.GetComponent<MovementComponent>();
 				ballMovement.Direction.x *= -1.0f;
+
+				Systems::IncrementPosition(ballMovement.Direction, ballTrasnfrom.Position);
 			}
 		}
 	}

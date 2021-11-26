@@ -20,6 +20,12 @@ void Systems::UpdatePosition(float speed, const Vector2& direction, Vector2& out
 	outPosition.y += speed * direction.y * deltaTime;
 }
 
+void Systems::IncrementPosition(const Vector2& direction, Vector2& outPosition, float value /*= 7.5f*/)
+{
+	outPosition.x += value * direction.x;
+	outPosition.y += value * direction.y;
+}
+
 bool Systems::Intersects(const SDL_Rect& a, const SDL_Rect& b)
 {
 	int leftA = a.x;
