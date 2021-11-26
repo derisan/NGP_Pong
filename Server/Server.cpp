@@ -91,6 +91,10 @@ void Server::Run()
 			stcPacket.LeftPaddlePosition = GetEntity(LEFT_PADDLE_ID)->GetComponent<TransformComponent>().Position;
 			stcPacket.RightPaddleID = RIGHT_PADDLE_ID;
 			stcPacket.RightPaddlePosition = GetEntity(RIGHT_PADDLE_ID)->GetComponent<TransformComponent>().Position;
+			stcPacket.L2PaddleID = L2_PADDLE_ID;
+			stcPacket.L2PaddlePosition = GetEntity(L2_PADDLE_ID)->GetComponent<TransformComponent>().Position;
+			stcPacket.R2PaddleID = R2_PADDLE_ID;
+			stcPacket.R2PaddlePosition = GetEntity(R2_PADDLE_ID)->GetComponent<TransformComponent>().Position;
 			stcPacket.BallOneID = BALL_ONE_ID;
 			stcPacket.BallOnePosition = GetEntity(BALL_ONE_ID)->GetComponent<TransformComponent>().Position;
 			stcPacket.BallTwoID = BALL_TWO_ID;
@@ -296,40 +300,44 @@ int Server::RecvPacketFromClient(ClientToServer& outPacket, const TCPSocketPtr& 
 
 void Server::UpdatePaddlesPosition(const ClientToServer& packet)
 {
-	int id = -1;
+	vector<uint8_t> IDs;
 
 	switch (packet.ClientNum)
 	{
 	case 0:
-		id = LEFT_PADDLE_ID;
+		IDs.push_back(LEFT_PADDLE_ID);
 		break;
 
 	case 1:
-		id = RIGHT_PADDLE_ID;
+		IDs.push_back(RIGHT_PADDLE_ID);
+		IDs.push_back(R2_PADDLE_ID);
 		break;
 
 	case 2:
-		id = L2_PADDLE_ID;
+		IDs.push_back(L2_PADDLE_ID);
 		break;
 
 	default:
 		break;
 	}
 
-	auto paddle = GetEntity(id);
-
-	if (paddle == nullptr)
+	for (auto id : IDs)
 	{
-		LOG("Server::UpdatePaddlesPosition - client id({0})", packet.ClientNum);
-		return;
+		auto paddle = GetEntity(id);
+
+		if (paddle == nullptr)
+		{
+			LOG("Server::UpdatePaddlesPosition - client id({0})", packet.ClientNum);
+			return;
+		}
+
+		auto& transform = paddle->GetComponent<TransformComponent>();
+		auto& movement = paddle->GetComponent<MovementComponent>();
+
+		movement.Direction.y = packet.YDirection;
+
+		Systems::UpdatePosition(movement.Speed, movement.Direction, transform.Position);
 	}
-
-	auto& transform = paddle->GetComponent<TransformComponent>();
-	auto& movement = paddle->GetComponent<MovementComponent>();
-
-	movement.Direction.y = packet.YDirection;
-
-	Systems::UpdatePosition(movement.Speed, movement.Direction, transform.Position);
 }
 
 void Server::UpdateBallsPosition()

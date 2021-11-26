@@ -32,7 +32,7 @@ private:
     WhoLose CheckBallAndWall();
 
 private:
-    static const int MAXIMUM_PLAYER_NUM = 2;
+    static const int MAXIMUM_PLAYER_NUM = 3;
 
     vector<TCPSocketPtr> mClientSockets;
 

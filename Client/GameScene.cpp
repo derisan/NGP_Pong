@@ -223,6 +223,18 @@ void GameScene::ProcessUpdatePacket(const ServerToClient& packet)
 	}
 
 	{
+		auto l2Paddle = mOwner->GetEntity(packet.L2PaddleID);
+		auto& transform = l2Paddle->GetComponent<TransformComponent>();
+		transform.Position = packet.L2PaddlePosition;
+	}
+
+	{
+		auto r2Paddle = mOwner->GetEntity(packet.R2PaddleID);
+		auto& transform = r2Paddle->GetComponent<TransformComponent>();
+		transform.Position = packet.R2PaddlePosition;
+	}
+
+	{
 		auto ballOne = mOwner->GetEntity(packet.BallOneID);
 		auto& transform = ballOne->GetComponent<TransformComponent>();
 		transform.Position = packet.BallOnePosition;
