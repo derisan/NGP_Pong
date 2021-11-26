@@ -166,6 +166,10 @@ void Server::ClientThreadFunc(const TCPSocketPtr& clientSock, int clientNum)
 	packet.LeftPaddlePosition = mEntities[LEFT_PADDLE_ID]->GetComponent<TransformComponent>().Position;
 	packet.RightPaddleID = RIGHT_PADDLE_ID;
 	packet.RightPaddlePosition = mEntities[RIGHT_PADDLE_ID]->GetComponent<TransformComponent>().Position;
+	packet.L2PaddleID = L2_PADDLE_ID;
+	packet.L2PaddlePosition = mEntities[L2_PADDLE_ID]->GetComponent<TransformComponent>().Position;
+	packet.R2PaddleID = R2_PADDLE_ID;
+	packet.R2PaddlePosition = mEntities[R2_PADDLE_ID]->GetComponent<TransformComponent>().Position;
 	packet.BallOneID = BALL_ONE_ID;
 	packet.BallOnePosition = mEntities[BALL_ONE_ID]->GetComponent<TransformComponent>().Position;
 	packet.BallTwoID = BALL_TWO_ID;
@@ -235,6 +239,20 @@ void Server::CreateGameWorld()
 		transform.Position = Vector2((WINDOW_WIDTH - PADDLE_WIDTH), (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
 	}
 
+	// Create l2 paddle
+	{
+		auto paddle = CreatePaddle(L2_PADDLE_ID);
+		auto& transform = paddle->GetComponent<TransformComponent>();
+		transform.Position = Vector2(static_cast<float>(WINDOW_WIDTH / 4), static_cast<float>((WINDOW_HEIGHT / 4)));
+	}
+
+	// Create r2 paddle
+	{
+		auto paddle = CreatePaddle(R2_PADDLE_ID);
+		auto& transform = paddle->GetComponent<TransformComponent>();
+		transform.Position = Vector2((WINDOW_WIDTH * 0.75f), (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
+	}
+
 	// Create Ball one
 	{
 		auto ball = CreateBall(BALL_ONE_ID);
@@ -288,6 +306,10 @@ void Server::UpdatePaddlesPosition(const ClientToServer& packet)
 
 	case 1:
 		id = RIGHT_PADDLE_ID;
+		break;
+
+	case 2:
+		id = L2_PADDLE_ID;
 		break;
 
 	default:

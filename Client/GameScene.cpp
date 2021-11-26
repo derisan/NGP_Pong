@@ -174,6 +174,20 @@ void GameScene::ProcessHelloPacket(const ServerToClient& packet)
 		transform.Position = packet.RightPaddlePosition;
 	}
 
+	// Create l2 paddle
+	{
+		auto l2Paddle = mOwner->CreatePaddle(packet.L2PaddleID);
+		auto& transform = l2Paddle->GetComponent<TransformComponent>();
+		transform.Position = packet.L2PaddlePosition;
+	}
+
+	// Create r2 paddle
+	{
+		auto r2Paddle = mOwner->CreatePaddle(packet.R2PaddleID);
+		auto& transform = r2Paddle->GetComponent<TransformComponent>();
+		transform.Position = packet.R2PaddlePosition;
+	}
+
 	// Create ball one
 	{
 		auto ballOne = mOwner->CreateBall(packet.BallOneID);

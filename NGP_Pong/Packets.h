@@ -1,9 +1,14 @@
 #pragma once
 
-constexpr uint8_t LEFT_PADDLE_ID = 0;
-constexpr uint8_t RIGHT_PADDLE_ID = 1;
-constexpr uint8_t BALL_ONE_ID = 2;
-constexpr uint8_t BALL_TWO_ID = 3;
+enum EntityID : uint8_t
+{
+	LEFT_PADDLE_ID = 0,
+	RIGHT_PADDLE_ID,
+	L2_PADDLE_ID,
+	R2_PADDLE_ID,
+	BALL_ONE_ID,
+	BALL_TWO_ID
+};
 
 enum class PacketType
 {
@@ -31,6 +36,12 @@ struct ServerToClient
 
 	uint8_t RightPaddleID;
 	Vector2 RightPaddlePosition;
+
+	uint8_t L2PaddleID;
+	Vector2 L2PaddlePosition;
+
+	uint8_t R2PaddleID;
+	Vector2 R2PaddlePosition;
 
 	uint8_t BallOneID;
 	Vector2 BallOnePosition;
