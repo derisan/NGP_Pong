@@ -64,8 +64,8 @@ void LoginScene::Render(SDL_Renderer* renderer)
 		SDL_Rect rect;
 		rect.x = 0;
 		rect.y = 0;
-		rect.w = mOwner->WINDOW_WIDTH;
-		rect.h = mOwner->WINDOW_HEIGHT;
+		rect.w = WINDOW_WIDTH;
+		rect.h = WINDOW_HEIGHT;
 
 		SDL_RenderCopyEx(renderer, mBackgroundTexture, nullptr,
 			&rect, 0, nullptr, SDL_FLIP_NONE);
@@ -75,8 +75,8 @@ void LoginScene::Render(SDL_Renderer* renderer)
 
 	if (text.size() > 0)
 	{
-		int x = mOwner->WINDOW_WIDTH / 2;
-		int y = mOwner->WINDOW_HEIGHT / 2;
+		int x = WINDOW_WIDTH / 2;
+		int y = WINDOW_HEIGHT / 2;
 
 		mOwner->DrawFont(text, x, y);
 	}
@@ -86,7 +86,7 @@ bool LoginScene::Connects()
 {
 	TCPSocketPtr& sock = mOwner->GetClientSocket();
 
-	SocketAddress serveraddr(mOwner->GetStringInput(), mOwner->SERVER_PORT);
+	SocketAddress serveraddr(mOwner->GetStringInput(), SERVER_PORT);
 
 	if (sock->Connect(serveraddr) != SOCKET_ERROR)
 	{

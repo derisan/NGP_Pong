@@ -121,10 +121,10 @@ void GameScene::Render(SDL_Renderer* renderer)
 		Systems::DrawRect(renderer, rect.Width, rect.Height, transform.Position);
 	}
 
-	mOwner->DrawFont(std::to_string(mScores.Left), mOwner->WINDOW_WIDTH / 4,
+	mOwner->DrawFont(std::to_string(mScores.Left), WINDOW_WIDTH / 4,
 		50, SDL_Color{ 255, 255, 0 });
 
-	mOwner->DrawFont(std::to_string(mScores.Right), mOwner->WINDOW_WIDTH - (mOwner->WINDOW_WIDTH / 4),
+	mOwner->DrawFont(std::to_string(mScores.Right), WINDOW_WIDTH - (WINDOW_WIDTH / 4),
 		50, SDL_Color{ 255, 255, 0 });
 }
 

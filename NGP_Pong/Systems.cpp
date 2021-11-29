@@ -1,6 +1,9 @@
 #include "PongPCH.h"
 #include "Systems.h"
 
+#include "Packets.h"
+#include "Game.h"
+
 void Systems::DrawRect(SDL_Renderer* renderer, float w, float h, const Vector2& position)
 {
 	SDL_Rect r{
@@ -20,10 +23,18 @@ void Systems::UpdatePosition(float speed, const Vector2& direction, Vector2& out
 	outPosition.y += speed * direction.y * deltaTime;
 }
 
-void Systems::IncrementPosition(const Vector2& direction, Vector2& outPosition, float value /*= 7.5f*/)
+void Systems::AdjustXPos(const Vector2& paddlePosition, const Vector2& ballDirection, Vector2& outBallPosition)
 {
-	outPosition.x += value * direction.x;
-	outPosition.y += value * direction.y;
+	float offset = BALL_WIDTH + 2.0f;
+
+	if (ballDirection.x < 0.0f)
+	{
+		outBallPosition.x = paddlePosition.x - offset;
+	}
+	else
+	{
+		outBallPosition.x = paddlePosition.x + offset;
+	}
 }
 
 bool Systems::Intersects(const SDL_Rect& a, const SDL_Rect& b)
@@ -59,4 +70,31 @@ bool Systems::Intersects(const SDL_Rect& a, const SDL_Rect& b)
 	}
 
 	return true;
+}
+
+CollisionSide Systems::GetCollisionSide(const SDL_Rect& paddleRect, const SDL_Rect& ballRect)
+{
+	SDL_Rect pRect = paddleRect;
+
+	pRect.x += 7;
+	pRect.w = 1;
+	pRect.h = 1;
+
+	bool isTopSideCollides = Intersects(pRect, ballRect);
+
+	if (isTopSideCollides)
+	{
+		return CollisionSide::Top;
+	}
+
+	pRect.y += paddleRect.h - 1;
+
+	bool isBottomSideCollides = Intersects(pRect, ballRect);
+	
+	if (isBottomSideCollides)
+	{
+		return CollisionSide::Bottom;
+	}
+
+	return CollisionSide::Others;
 }

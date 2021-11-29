@@ -440,11 +440,11 @@ void Server::CheckPaddleAndBall()
 			// 볼가져오기
 			Entity ball = Entity(bEntity, this);
 
-			auto& ballTrasnfrom = ball.GetComponent< TransformComponent>();
+			auto& ballTransform = ball.GetComponent< TransformComponent>();
 			auto& ballRect = ball.GetComponent<RectComponent>();
 
 			SDL_Rect bRect = {
-			static_cast<int>(ballTrasnfrom.Position.x), static_cast<int>(ballTrasnfrom.Position.y),
+			static_cast<int>(ballTransform.Position.x), static_cast<int>(ballTransform.Position.y),
 			static_cast<int>(ballRect.Width), static_cast<int>(ballRect.Height)
 			};
 
@@ -452,10 +452,26 @@ void Server::CheckPaddleAndBall()
 
 			if (isCollide)
 			{
-				auto& ballMovement = ball.GetComponent<MovementComponent>();
-				ballMovement.Direction.x *= -1.0f;
+				CollisionSide side = Systems::GetCollisionSide(pRect, bRect);
 
-				Systems::IncrementPosition(ballMovement.Direction, ballTrasnfrom.Position);
+				auto& ballMovement = ball.GetComponent<MovementComponent>();
+
+				switch (side)
+				{
+				case CollisionSide::Top:
+				case CollisionSide::Bottom:
+					ballMovement.Direction *= -1.0f;
+					break;
+
+				case CollisionSide::Others:
+					ballMovement.Direction.x *= -1.0f;
+					break;
+
+				default:
+					break;
+				}
+
+				Systems::AdjustXPos(paddleTransform.Position, ballMovement.Direction, ballTransform.Position);
 			}
 		}
 	}

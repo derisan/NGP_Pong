@@ -2,6 +2,17 @@
 
 class Entity;
 
+constexpr int SERVER_PORT = 9000;
+static const char* SERVER_IP = "127.0.0.1";
+
+constexpr int WINDOW_WIDTH = 640;
+constexpr int WINDOW_HEIGHT = 480;
+constexpr float PADDLE_WIDTH = 15.0f;
+constexpr float PADDLE_HEIGHT = 100.0f;
+constexpr float PADDLE_SPEED = 200.0f;
+constexpr float BALL_WIDTH = 15.0f;
+constexpr float BALL_SPEED = 150.0f;
+
 class Game
 {
 	friend class Entity;
@@ -19,17 +30,6 @@ public:
 	Entity* CreateBall(uint8_t id);
 
 	Entity* GetEntity(uint8_t id);
-
-	const int SERVER_PORT = 9000;
-	const char* SERVER_IP = "127.0.0.1";
-
-	const int WINDOW_WIDTH = 640;
-	const int WINDOW_HEIGHT = 480;
-	const float PADDLE_WIDTH = 15.0f;
-	const float PADDLE_HEIGHT = 100.0f;
-	const float PADDLE_SPEED = 200.0f;
-	const float BALL_WIDTH = 15.0f;
-	const float BALL_SPEED = 150.0f;
 
 	entt::registry mRegistry;
 
