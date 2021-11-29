@@ -37,4 +37,7 @@ private:
 	bool mShouldSend;
 
 	Score mScores;
+
+	uint8_t myPaddleID;
+
 };

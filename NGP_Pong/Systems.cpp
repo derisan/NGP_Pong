@@ -4,6 +4,20 @@
 #include "Packets.h"
 #include "Game.h"
 
+// 빨간색으로 그리기 
+void Systems::DrawRectColor(SDL_Renderer* renderer, float w, float h, const Vector2& position)
+{
+	SDL_Rect r{
+	static_cast<int>(position.x),
+	static_cast<int>(position.y),
+	static_cast<int>(w),
+	static_cast<int>(h)
+	};
+
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_RenderFillRect(renderer, &r);
+}
+
 void Systems::DrawRect(SDL_Renderer* renderer, float w, float h, const Vector2& position)
 {
 	SDL_Rect r{
@@ -15,6 +29,7 @@ void Systems::DrawRect(SDL_Renderer* renderer, float w, float h, const Vector2& 
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderFillRect(renderer, &r);
+
 }
 
 void Systems::UpdatePosition(float speed, const Vector2& direction, Vector2& outPosition, float deltaTime /*= 0.0166f*/)

@@ -117,8 +117,18 @@ void GameScene::Render(SDL_Renderer* renderer)
 	for (auto entity : view)
 	{
 		auto [rect, transform] = view.get<RectComponent, TransformComponent>(entity);
-
+		//내 패들만 빨간색으로 그린다
+		// 내 패들을 어떻게 아느냐
+		// 상자 상자 상자 상자 가있다면. 내 클라이언트 번호 =0이랑 왼쪽이면
+		// 흰색으로 다그린다음
 		Systems::DrawRect(renderer, rect.Width, rect.Height, transform.Position);
+		auto myPaddle = mOwner->GetEntity(myPaddleID);
+		auto tmpRect = myPaddle->GetComponent<RectComponent>();
+		auto tmpTranform = myPaddle->GetComponent<TransformComponent>();
+		// 내껏만 빨강으로 한다.
+		Systems::DrawRectColor(renderer, tmpRect.Width, tmpRect.Height, tmpTranform.Position);
+
+
 	}
 
 	mOwner->DrawFont(std::to_string(mScores.Left), WINDOW_WIDTH / 4,
@@ -160,8 +170,21 @@ void GameScene::ProcessHelloPacket(const ServerToClient& packet)
 
 	LOG("My client num: {0}", mClientNum);
 
+	if (mClientNum == 0)
+	{
+		myPaddleID = packet.LeftPaddleID;
+	}
+	if (mClientNum == 1)
+	{
+		myPaddleID = packet.RightPaddleID;
+	}
+	if (mClientNum == 2)
+	{
+		myPaddleID = packet.L2PaddleID;
+	}
 	// Create left paddle
 	{
+		// 방법1 클라 패들 id를 여기서 지정해준다.
 		auto leftPaddle = mOwner->CreatePaddle(packet.LeftPaddleID);
 		auto& transform = leftPaddle->GetComponent<TransformComponent>();
 		transform.Position = packet.LeftPaddlePosition;
