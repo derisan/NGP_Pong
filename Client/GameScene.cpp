@@ -113,22 +113,26 @@ void GameScene::Update(float deltaTime)
 
 void GameScene::Render(SDL_Renderer* renderer)
 {
-	auto view = (mOwner->mRegistry).view<RectComponent, TransformComponent>();
+	auto view = (mOwner->mRegistry).view<RectComponent>();
 	for (auto entity : view)
 	{
-		auto [rect, transform] = view.get<RectComponent, TransformComponent>(entity);
-		//내 패들만 빨간색으로 그린다
-		// 내 패들을 어떻게 아느냐
-		// 상자 상자 상자 상자 가있다면. 내 클라이언트 번호 =0이랑 왼쪽이면
-		// 흰색으로 다그린다음
-		Systems::DrawRect(renderer, rect.Width, rect.Height, transform.Position);
-		auto myPaddle = mOwner->GetEntity(myPaddleID);
-		auto tmpRect = myPaddle->GetComponent<RectComponent>();
-		auto tmpTranform = myPaddle->GetComponent<TransformComponent>();
-		// 내껏만 빨강으로 한다.
-		Systems::DrawRectColor(renderer, tmpRect.Width, tmpRect.Height, tmpTranform.Position);
+		Entity e = Entity(entity, mOwner);
 
+		auto& rect = e.GetComponent<RectComponent>();
+		auto& transform = e.GetComponent<TransformComponent>();
+		auto& id = e.GetComponent<IdComponent>();
 
+		SDL_Color drawColor = { 255, 255, 255, 255 };
+
+		bool isMyPaddle = std::any_of(myPaddlesID.begin(), myPaddlesID.end(), [&id](uint8_t a) {
+			return a == id.ID; });
+
+		if (isMyPaddle)
+		{
+			drawColor = MY_PADDLE_COLOR;
+		}
+
+		Systems::DrawRect(renderer, rect.Width, rect.Height, transform.Position, drawColor);
 	}
 
 	mOwner->DrawFont(std::to_string(mScores.Left), WINDOW_WIDTH / 4,
@@ -170,21 +174,28 @@ void GameScene::ProcessHelloPacket(const ServerToClient& packet)
 
 	LOG("My client num: {0}", mClientNum);
 
-	if (mClientNum == 0)
+	switch (packet.ClientNum)
 	{
-		myPaddleID = packet.LeftPaddleID;
+	case 0:
+		myPaddlesID.push_back(packet.LeftPaddleID);
+		break;
+
+	case 1:
+		myPaddlesID.push_back(packet.RightPaddleID);
+		myPaddlesID.push_back(packet.R2PaddleID);
+		break;
+
+	case 2:
+		myPaddlesID.push_back(packet.L2PaddleID);
+		break;
+
+	default:
+		LOG("Unknown client number.");
+		break;
 	}
-	if (mClientNum == 1)
-	{
-		myPaddleID = packet.RightPaddleID;
-	}
-	if (mClientNum == 2)
-	{
-		myPaddleID = packet.L2PaddleID;
-	}
+
 	// Create left paddle
 	{
-		// 방법1 클라 패들 id를 여기서 지정해준다.
 		auto leftPaddle = mOwner->CreatePaddle(packet.LeftPaddleID);
 		auto& transform = leftPaddle->GetComponent<TransformComponent>();
 		transform.Position = packet.LeftPaddlePosition;

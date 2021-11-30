@@ -24,6 +24,8 @@ private:
 	void ProcessGameOverPacket(const ServerToClient& packet);
 
 private:
+	const SDL_Color MY_PADDLE_COLOR = { 255, 0, 0, 255 };
+
 	struct Score
 	{
 		int Left;
@@ -38,6 +40,5 @@ private:
 
 	Score mScores;
 
-	uint8_t myPaddleID;
-
+	vector<uint8_t> myPaddlesID;
 };
