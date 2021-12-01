@@ -220,6 +220,8 @@ void GameScene::ProcessHelloPacket(const ServerToClient& packet)
 		auto r2Paddle = mOwner->CreatePaddle(packet.R2PaddleID);
 		auto& transform = r2Paddle->GetComponent<TransformComponent>();
 		transform.Position = packet.R2PaddlePosition;
+		auto& rect = r2Paddle->GetComponent<RectComponent>();
+		rect.Height = SMALL_PADDLE_HEIGHT;
 	}
 
 	// Create ball one

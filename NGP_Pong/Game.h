@@ -9,6 +9,7 @@ constexpr int WINDOW_WIDTH = 640;
 constexpr int WINDOW_HEIGHT = 480;
 constexpr float PADDLE_WIDTH = 15.0f;
 constexpr float PADDLE_HEIGHT = 100.0f;
+constexpr float SMALL_PADDLE_HEIGHT = 50.0f;
 constexpr float PADDLE_SPEED = 200.0f;
 constexpr float BALL_WIDTH = 15.0f;
 constexpr float BALL_SPEED = 150.0f;

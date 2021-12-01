@@ -256,7 +256,9 @@ void Server::CreateGameWorld()
 	{
 		auto paddle = CreatePaddle(R2_PADDLE_ID);
 		auto& transform = paddle->GetComponent<TransformComponent>();
-		transform.Position = Vector2((WINDOW_WIDTH * 0.75f), (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2));
+		transform.Position = Vector2((WINDOW_WIDTH * 0.75f), (WINDOW_HEIGHT / 2) - (SMALL_PADDLE_HEIGHT / 2));
+		auto& rect = paddle->GetComponent<RectComponent>();
+		rect.Height = SMALL_PADDLE_HEIGHT;
 	}
 
 	// Create Ball one
