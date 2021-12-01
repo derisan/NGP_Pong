@@ -19,6 +19,7 @@
     <ClInclude Include="Pong.h" />
     <ClInclude Include="PongMath.h" />
     <ClInclude Include="PongPCH.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="SocketAddress.h" />
     <ClInclude Include="SocketUtil.h" />
     <ClInclude Include="Systems.h" />
@@ -33,6 +34,7 @@
     <ClCompile Include="PongPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="SocketAddress.cpp" />
     <ClCompile Include="SocketUtil.cpp" />
     <ClCompile Include="Systems.cpp" />
