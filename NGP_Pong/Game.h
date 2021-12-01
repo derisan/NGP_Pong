@@ -12,6 +12,7 @@ constexpr float PADDLE_HEIGHT = 100.0f;
 constexpr float PADDLE_SPEED = 200.0f;
 constexpr float BALL_WIDTH = 15.0f;
 constexpr float BALL_SPEED = 150.0f;
+constexpr float MAX_BALL_SPEED = 200.0f;
 
 class Game
 {

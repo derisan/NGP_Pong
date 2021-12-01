@@ -3,6 +3,7 @@
 
 #include "Packets.h"
 #include "Game.h"
+#include "PongMath.h"
 
 void Systems::DrawRect(SDL_Renderer* renderer, float w, float h, const Vector2& position, const SDL_Color& color)
 {
@@ -97,4 +98,11 @@ CollisionSide Systems::GetCollisionSide(const SDL_Rect& paddleRect, const SDL_Re
 	}
 
 	return CollisionSide::Others;
+}
+
+void Systems::IncreaseSpeed(float& outSpeed)
+{
+	outSpeed += 10.0f;
+
+	outSpeed = Math::Clamp(outSpeed, BALL_SPEED, MAX_BALL_SPEED);
 }

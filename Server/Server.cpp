@@ -472,6 +472,7 @@ void Server::CheckPaddleAndBall()
 				}
 
 				Systems::AdjustXPos(paddleTransform.Position, ballMovement.Direction, ballTransform.Position);
+				Systems::IncreaseSpeed(ballMovement.Speed);
 			}
 		}
 	}
@@ -485,6 +486,7 @@ void Server::ResetGameWorld()
 		auto& movement = ball->GetComponent<MovementComponent>();
 		transform.Position = Vector2((WINDOW_WIDTH / 2) - (BALL_WIDTH / 2), (WINDOW_HEIGHT / 2) - (BALL_WIDTH / 2));  // Center of screen
 		movement.Direction = Vector2(-1.0f, -1.0f); // Up-Left
+		movement.Speed = BALL_SPEED;
 	}
 
 	{
@@ -493,5 +495,6 @@ void Server::ResetGameWorld()
 		auto& movement = ball->GetComponent<MovementComponent>();
 		transform.Position = Vector2((WINDOW_WIDTH / 2) - (BALL_WIDTH / 2), (WINDOW_HEIGHT / 2) - (BALL_WIDTH / 2));  // Center of screen
 		movement.Direction = Vector2(1.0f, 1.0f); // Down-Right
+		movement.Speed = BALL_SPEED;
 	}
 }

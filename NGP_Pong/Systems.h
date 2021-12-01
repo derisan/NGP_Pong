@@ -15,4 +15,5 @@ public:
 	static void AdjustXPos(const Vector2& paddlePosition, const Vector2& ballDirection, Vector2& outBallPosition);
 	static bool Intersects(const SDL_Rect& a, const SDL_Rect& b);
 	static CollisionSide GetCollisionSide(const SDL_Rect& paddleRect, const SDL_Rect& ballRect);
+	static void IncreaseSpeed(float& outSpeed);
 };
