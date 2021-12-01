@@ -18,6 +18,8 @@ bool Server::Init()
 	//윈속 초기화
 	SocketUtil::StaticInit();
 
+	Random::StaticInit();
+
 	CreateGameWorld();
 
 	// 플레이어 접속 대기
@@ -465,6 +467,7 @@ void Server::CheckPaddleAndBall()
 
 				case CollisionSide::Others:
 					ballMovement.Direction.x *= -1.0f;
+					ballMovement.Direction.y *= Random::GetFloat(0.8f, 1.25f);
 					break;
 
 				default:
