@@ -88,7 +88,7 @@ void Server::Run()
 				{
 					++mScore.Right;
 				}
-				else
+				else if(who == WhoLose::Right)
 				{
 					++mScore.Left;
 				}
@@ -415,6 +415,8 @@ WhoLose Server::CheckBallAndWall()
 {
 	auto balls = mRegistry.view<Ball>();
 
+	vector<WhoLose> mWhoLose;
+
 	for (auto entity : balls)
 	{
 		Entity ball = Entity(entity, this);
@@ -432,15 +434,28 @@ WhoLose Server::CheckBallAndWall()
 
 		if (pos.x <= 0.0f)
 		{
-			return WhoLose::Left;
+			mWhoLose.push_back(WhoLose::Left);
 		}
 		else if (pos.x + rect.Width >= WINDOW_WIDTH)
 		{
-			return WhoLose::Right;
+			mWhoLose.push_back(WhoLose::Right);
 		}
 	}
 
-	return WhoLose::None;
+	if (mWhoLose.empty())
+	{
+		return WhoLose::None;
+	}
+
+	else if (mWhoLose.size() == balls.size())
+	{
+		return WhoLose::Draw;
+	}
+
+	else
+	{
+		return mWhoLose.front();
+	}
 }
 
 

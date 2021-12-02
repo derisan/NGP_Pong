@@ -338,6 +338,9 @@ void GameScene::ProcessGameOverPacket(const ServerToClient& packet)
 		mScores = { 0, 0 };
 		break;
 
+	case WhoLose::Draw:
+		break;
+
 	case WhoLose::None:
 		break;
 
