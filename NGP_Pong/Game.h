@@ -15,6 +15,12 @@ constexpr float BALL_WIDTH = 15.0f;
 constexpr float BALL_SPEED = 150.0f;
 constexpr float MAX_BALL_SPEED = 200.0f;
 
+struct Score
+{
+	int Left;
+	int Right;
+};
+
 class Game
 {
 	friend class Entity;

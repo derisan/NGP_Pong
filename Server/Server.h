@@ -43,5 +43,7 @@ private:
     deque<ClientToServer> mPackets;
 
     CRITICAL_SECTION mCS;
+
+    Score mScore;
 };
 

@@ -2,6 +2,7 @@
 #include "GameScene.h"
 
 #include "Client.h"
+#include "TextureManager.h"
 
 GameScene* GameScene::sInstance;
 
@@ -10,6 +11,9 @@ GameScene::GameScene(Client* client)
 	, mClientNum(-1)
 	, mShouldSend(true)
 	, mScores{ 0, 0 }
+	, mWinTexture(nullptr)
+	, mIsShowingWinningScreen(false)
+	, mElapsed(0.0f)
 {
 
 }
@@ -71,7 +75,7 @@ void GameScene::Exit()
 
 void GameScene::ProcessInput(const uint8_t* keystate)
 {
-	if (mShouldSend == false)
+	if (mShouldSend == false || mIsShowingWinningScreen)
 	{
 		return;
 	}
@@ -98,6 +102,19 @@ void GameScene::ProcessInput(const uint8_t* keystate)
 
 void GameScene::Update(float deltaTime)
 {
+	if (mIsShowingWinningScreen)
+	{
+		mElapsed += deltaTime;
+
+		if (mElapsed >= 2.0f)
+		{
+			mIsShowingWinningScreen = false;
+			mElapsed = 0.0f;
+		}
+
+		return;
+	}
+
 	if (mShouldSend == false)
 	{
 		mShouldSend = true;
@@ -140,6 +157,20 @@ void GameScene::Render(SDL_Renderer* renderer)
 
 	mOwner->DrawFont(std::to_string(mScores.Right), WINDOW_WIDTH - (WINDOW_WIDTH / 4),
 		50, SDL_Color{ 255, 255, 0 });
+
+	if (mIsShowingWinningScreen)
+	{
+		{
+			SDL_Rect rect;
+			rect.x = WINDOW_WIDTH / 4;
+			rect.y = WINDOW_HEIGHT / 4;
+			rect.w = WINDOW_WIDTH / 2;
+			rect.h = WINDOW_HEIGHT / 2;
+
+			SDL_RenderCopyEx(renderer, mWinTexture, nullptr,
+				&rect, 0, nullptr, SDL_FLIP_NONE);
+		}
+	}
 }
 
 void GameScene::ProcessPacket(const ServerToClient& packet)
@@ -293,6 +324,18 @@ void GameScene::ProcessGameOverPacket(const ServerToClient& packet)
 
 	case WhoLose::Right:
 		mScores.Left += 1;
+		break;
+
+	case WhoLose::LeftWin:
+		mWinTexture = TextureManager::GetTexture("Assets/win_left.png");
+		mIsShowingWinningScreen = true;
+		mScores = { 0, 0 };
+		break;
+
+	case WhoLose::RightWin:
+		mWinTexture = TextureManager::GetTexture("Assets/win_right.png");
+		mIsShowingWinningScreen = true;
+		mScores = { 0, 0 };
 		break;
 
 	case WhoLose::None:

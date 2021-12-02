@@ -26,12 +26,6 @@ private:
 private:
 	const SDL_Color MY_PADDLE_COLOR = { 255, 0, 0, 255 };
 
-	struct Score
-	{
-		int Left;
-		int Right;
-	};
-
 	static GameScene* sInstance;
 
 	int mClientNum;
@@ -41,4 +35,9 @@ private:
 	Score mScores;
 
 	vector<uint8_t> myPaddlesID;
+
+	SDL_Texture* mWinTexture;
+
+	bool mIsShowingWinningScreen;
+	float mElapsed;
 };

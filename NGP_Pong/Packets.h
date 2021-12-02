@@ -22,6 +22,8 @@ enum class WhoLose
 {
 	Left,
 	Right,
+	LeftWin,
+	RightWin,
 	None
 };
 

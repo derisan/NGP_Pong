@@ -4,6 +4,8 @@
 Server::Server()
 	: Game()
 	, mIsAllHelloPacketSent(nullptr)
+	, mCS{}
+	, mScore{ 0, 0 }
 {
 }
 
@@ -82,10 +84,35 @@ void Server::Run()
 			}
 			else
 			{
+				if (who == WhoLose::Left)
+				{
+					++mScore.Right;
+				}
+				else
+				{
+					++mScore.Left;
+				}
+
+				if (mScore.Left >= 5)
+				{
+					stcPacket.Who = WhoLose::LeftWin;
+					mScore = { 0,0 };
+				}
+
+				else if (mScore.Right >= 5)
+				{
+					stcPacket.Who = WhoLose::RightWin;
+					mScore = { 0,0 };
+				}
+
+				else
+				{
+					stcPacket.Who = who;
+				}
+
 				ResetGameWorld();
 
 				stcPacket.PType = PacketType::GameOver;
-				stcPacket.Who = who;
 			}
 
 			stcPacket.ClientNum = -1;
