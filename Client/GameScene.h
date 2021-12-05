@@ -36,7 +36,7 @@ private:
 
 	vector<uint8_t> myPaddlesID;
 
-	SDL_Texture* mWinTexture;
+	SDL_Texture* mWinLoseTexture;
 
 	bool mIsShowingWinningScreen;
 	float mElapsed;

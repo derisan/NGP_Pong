@@ -11,7 +11,7 @@ GameScene::GameScene(Client* client)
 	, mClientNum(-1)
 	, mShouldSend(true)
 	, mScores{ 0, 0 }
-	, mWinTexture(nullptr)
+	, mWinLoseTexture(nullptr)
 	, mIsShowingWinningScreen(false)
 	, mElapsed(0.0f)
 {
@@ -167,7 +167,7 @@ void GameScene::Render(SDL_Renderer* renderer)
 			rect.w = WINDOW_WIDTH / 2;
 			rect.h = WINDOW_HEIGHT / 2;
 
-			SDL_RenderCopyEx(renderer, mWinTexture, nullptr,
+			SDL_RenderCopyEx(renderer, mWinLoseTexture, nullptr,
 				&rect, 0, nullptr, SDL_FLIP_NONE);
 		}
 	}
@@ -327,13 +327,27 @@ void GameScene::ProcessGameOverPacket(const ServerToClient& packet)
 		break;
 
 	case WhoLose::LeftWin:
-		mWinTexture = TextureManager::GetTexture("Assets/win_left.png");
+		if (mClientNum == 0 || mClientNum == 2)
+		{
+			mWinLoseTexture = TextureManager::GetTexture("Assets/YouWin.png");
+		}
+		else
+		{
+			mWinLoseTexture = TextureManager::GetTexture("Assets/YouLose.png");
+		}
 		mIsShowingWinningScreen = true;
 		mScores = { 0, 0 };
 		break;
 
 	case WhoLose::RightWin:
-		mWinTexture = TextureManager::GetTexture("Assets/win_right.png");
+		if (mClientNum == 1)
+		{
+			mWinLoseTexture = TextureManager::GetTexture("Assets/YouWin.png");
+		}
+		else
+		{
+			mWinLoseTexture = TextureManager::GetTexture("Assets/YouLose.png");
+		}
 		mIsShowingWinningScreen = true;
 		mScores = { 0, 0 };
 		break;
