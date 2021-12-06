@@ -40,7 +40,7 @@ private:
 
     HANDLE mIsAllHelloPacketSent;
 
-    deque<ClientToServer> mPackets;
+    vector<ClientToServer> mPackets;
 
     CRITICAL_SECTION mCS;
 
