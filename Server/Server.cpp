@@ -55,7 +55,7 @@ void Server::Run()
 		EnterCriticalSection(&mCS);
 
 		auto numPackets = mPackets.size();
-		if (numPackets >= mClientSockets.size())
+		if (numPackets == mClientSockets.size())
 		{
 			if (numPackets == 0)
 			{
